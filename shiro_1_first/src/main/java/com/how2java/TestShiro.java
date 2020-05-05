@@ -52,9 +52,9 @@ public class TestShiro {
     	//登陆每个用户
     	for (User user : users) {
     		if(login(user)) 
-    			System.out.printf("%s \t成功登陆，用的密码是 %s\t %n",user.getName(),user.getPassword());
+    			System.out.printf("%s \t成功登录，用的密码是 %s\t %n",user.getName(),user.getPassword());
     		else 
-    			System.out.printf("%s \t成功失败，用的密码是 %s\t %n",user.getName(),user.getPassword());
+    			System.out.printf("%s \t登录失败，用的密码是 %s\t %n",user.getName(),user.getPassword());
 		}
     	
     	
