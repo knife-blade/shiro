@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(Model model, String name, String password) {
-        System.out.println(name);
-        System.out.println(password);
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(name, password);
         try {
