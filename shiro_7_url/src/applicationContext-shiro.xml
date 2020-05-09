@@ -22,7 +22,7 @@
         <property name="securityManager" ref="securityManager" />
         <!-- 配置我们的登录请求地址 -->
         <property name="loginUrl" value="/login" />
-        <!-- 如果您请求的资源不再您的权限范围，则跳转到/403请求地址 -->
+        <!-- 如果您请求的资源不在您的权限范围，则跳转到/403请求地址 -->
         <property name="unauthorizedUrl" value="/unauthorized" />
         <!-- 退出 -->
         <property name="filters">
@@ -38,7 +38,7 @@
                 /login=anon
                 /index=anon
                 /static/**=anon
-                <!-- 只对业务功能进行权限管理，权限配置本身不需要没有做权限要求，这样做是为了不让初学者混淆 -->
+                <!-- 只对业务功能进行权限管理，权限配置本身没有做权限要求，这样做是为了不让初学者混淆 -->
                 /config/**=anon
                 /doLogout=logout
                 <!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过过滤器url -->
