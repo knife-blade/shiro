@@ -16,15 +16,15 @@ public class DatabaseRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-		//ÄÜ½øÈëµ½ÕâÀï£¬±íÊ¾ÕËºÅÒÑ¾­Í¨¹ıÑéÖ¤ÁË
+		//èƒ½è¿›å…¥åˆ°è¿™é‡Œï¼Œè¡¨ç¤ºè´¦å·å·²ç»é€šè¿‡éªŒè¯äº†
 		String userName =(String) principalCollection.getPrimaryPrincipal();
-		//Í¨¹ıDAO»ñÈ¡½ÇÉ«ºÍÈ¨ÏŞ
+		//é€šè¿‡DAOè·å–è§’è‰²å’Œæƒé™
 		Set<String> permissions = new DAO().listPermissions(userName);
 		Set<String> roles = new DAO().listRoles(userName);
-		
-		//ÊÚÈ¨¶ÔÏó
+
+		//æˆæƒå¯¹è±¡
 		SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();
-		//°ÑÍ¨¹ıDAO»ñÈ¡µ½µÄ½ÇÉ«ºÍÈ¨ÏŞ·Å½øÈ¥
+		//æŠŠé€šè¿‡DAOè·å–åˆ°çš„è§’è‰²å’Œæƒé™æ”¾è¿›å»
 		s.setStringPermissions(permissions);
 		s.setRoles(roles);
 		return s;
@@ -32,19 +32,19 @@ public class DatabaseRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		//»ñÈ¡ÕËºÅÃÜÂë
+		//è·å–è´¦å·å¯†ç 
 		UsernamePasswordToken t = (UsernamePasswordToken) token;
 		String userName= token.getPrincipal().toString();
 		String password= new String( t.getPassword());
-		//»ñÈ¡Êı¾İ¿âÖĞµÄÃÜÂë
+		//è·å–æ•°æ®åº“ä¸­çš„å¯†ç 
 		String passwordInDB = new DAO().getPassword(userName);
 
-		
-		//Èç¹ûÎª¿Õ¾ÍÊÇÕËºÅ²»´æÔÚ£¬Èç¹û²»ÏàÍ¬¾ÍÊÇÃÜÂë´íÎó£¬µ«ÊÇ¶¼Å×³öAuthenticationException£¬¶ø²»ÊÇÅ×³ö¾ßÌå´íÎóÔ­Òò£¬ÃâµÃ¸øÆÆ½âÕßÌá¹©°ïÖúĞÅÏ¢
-		if(null==passwordInDB || !passwordInDB.equals(password)) 
+
+		//å¦‚æœä¸ºç©ºå°±æ˜¯è´¦å·ä¸å­˜åœ¨ï¼Œå¦‚æœä¸ç›¸åŒå°±æ˜¯å¯†ç é”™è¯¯ï¼Œä½†æ˜¯éƒ½æŠ›å‡ºAuthenticationExceptionï¼Œè€Œä¸æ˜¯æŠ›å‡ºå…·ä½“é”™è¯¯åŸå› ï¼Œå…å¾—ç»™ç ´è§£è€…æä¾›å¸®åŠ©ä¿¡æ¯
+		if(null==passwordInDB || !passwordInDB.equals(password))
 			throw new AuthenticationException();
-		
-		//ÈÏÖ¤ĞÅÏ¢Àï´æ·ÅÕËºÅÃÜÂë, getName() ÊÇµ±Ç°RealmµÄ¼Ì³Ğ·½·¨,Í¨³£·µ»Øµ±Ç°ÀàÃû :databaseRealm
+
+		//è®¤è¯ä¿¡æ¯é‡Œå­˜æ”¾è´¦å·å¯†ç , getName() æ˜¯å½“å‰Realmçš„ç»§æ‰¿æ–¹æ³•,é€šå¸¸è¿”å›å½“å‰ç±»å :databaseRealm
 		SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(userName,password,getName());
 		return a;
 	}
