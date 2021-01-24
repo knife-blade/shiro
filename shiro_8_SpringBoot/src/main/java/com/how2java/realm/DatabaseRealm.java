@@ -31,22 +31,7 @@ public class DatabaseRealm extends AuthorizingRealm {
     @Autowired
     private PermissionService permissionService;
 
-    @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        // 能进入到这里，表示账号已经通过验证了
-        String userName = (String) principalCollection.getPrimaryPrincipal();
-        // 通过service获取角色和权限
-        Set<String> permissions = permissionService.listPermissions(userName);
-        Set<String> roles = roleService.listRoleNames(userName);
-
-        // 授权对象
-        SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();
-        // 把通过service获取到的角色和权限放进去
-        s.setStringPermissions(permissions);
-        s.setRoles(roles);
-        return s;
-    }
-
+    // 登录验证
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         // 获取账号密码
@@ -62,6 +47,23 @@ public class DatabaseRealm extends AuthorizingRealm {
         SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(userName, passwordInDB, ByteSource.Util.bytes(salt),
                 getName());
         return a;
+    }
+
+    // 权限验证
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        // 能进入到这里，表示账号已经通过验证了
+        String userName = (String) principalCollection.getPrimaryPrincipal();
+        // 通过service获取角色和权限
+        Set<String> permissions = permissionService.listPermissions(userName);
+        Set<String> roles = roleService.listRoleNames(userName);
+
+        // 授权对象
+        SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();
+        // 把通过service获取到的角色和权限放进去
+        s.setStringPermissions(permissions);
+        s.setRoles(roles);
+        return s;
     }
 
 }
