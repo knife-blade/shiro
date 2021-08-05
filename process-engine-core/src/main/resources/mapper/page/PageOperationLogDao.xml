@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchealth.platform.processengine.dao.page.PageOperationLogDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.touchealth.platform.processengine.entity.page.PageOperationLog">
+        <result column="id" property="id" />
+        <result column="created_by" property="createdBy" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted_flag" property="deletedFlag" />
+        <result column="channel_no" property="channelNo" />
+        <result column="version_id" property="versionId" />
+        <result column="version_name" property="versionName" />
+        <result column="page_id" property="pageId" />
+        <result column="page_name" property="pageName" />
+        <result column="alert_content" property="alertContent" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        created_by,
+        updated_by,
+        created_time,
+        updated_time,
+        deleted_flag,
+        channel_no, version_id, version_name, page_id, page_name, alert_content
+    </sql>
+
+</mapper>

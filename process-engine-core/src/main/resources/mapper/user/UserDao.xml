@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchealth.platform.processengine.dao.user.UserDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.touchealth.platform.processengine.entity.user.User">
+        <result column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="code" property="code"/>
+        <result column="user_type" property="userType"/>
+        <result column="real_name" property="realName"/>
+        <result column="nick_name" property="nickName"/>
+        <result column="sex" property="sex"/>
+        <result column="marital_status" property="maritalStatus"/>
+        <result column="email" property="email"/>
+        <result column="mobile_no" property="mobileNo"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="identity_type" property="identityType"/>
+        <result column="identity_no" property="identityNo"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="distinct" property="distinct"/>
+        <result column="remark" property="remark"/>
+        <result column="avatar" property="avatar"/>
+        <result column="birthday" property="birthday"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="post_job_id" property="postJobId"/>
+        <result column="staff_status" property="staffStatus"/>
+        <result column="channel_no" property="channelNo"/>
+        <result column="is_disable" property="isDisable"/>
+        <result column="is_del" property="isDel"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, created_by, updated_by, code, user_type, real_name, nick_name, sex, marital_status, email, mobile_no, password, salt, identity_type,
+        identity_no, province, city, `distinct`, remark, avatar, birthday, dept_id, post_job_id, staff_status, channel_no, is_disable, is_del, created_at,
+        updated_at, version
+    </sql>
+
+    <!-- 查询岗位人数 -->
+    <select id="countByPostJobIds" resultType="com.touchealth.platform.processengine.pojo.bo.user.PostJobUserCountBo" parameterType="List">
+        select
+        post_job_id, count(id) userCount
+        from `user`
+        where post_job_id in
+        <foreach item="pjId" index="index" collection="list" open="(" separator="," close=")">
+            #{pjId}
+        </foreach>
+        group by post_job_id
+    </select>
+
+</mapper>

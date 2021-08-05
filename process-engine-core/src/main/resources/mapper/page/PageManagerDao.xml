@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchealth.platform.processengine.dao.page.PageManagerDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.touchealth.platform.processengine.entity.page.PageManager">
+        <result column="id" property="id" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="deleted_flag" property="deletedFlag" />
+        <result column="channel_no" property="channelNo" />
+        <result column="version_id" property="versionId" />
+        <result column="page_name" property="pageName" />
+        <result column="business_type" property="businessType" />
+        <result column="folder_id" property="folderId" />
+        <result column="is_folder" property="isFolder" />
+        <result column="is_support_template" property="isSupportTemplate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        created_by,
+        created_time,
+        updated_time,
+        updated_by,
+        deleted_flag,
+        page_unique_id, version_id, page_name, channel_no, business_type, folder_id, is_folder, status, sort_no, change_status, page_tags, operator_ids, router_name, is_support_template
+    </sql>
+
+    <select id="listByModuleType" parameterType="com.touchealth.platform.processengine.pojo.query.PageManagerQuery" resultType="com.touchealth.platform.processengine.entity.page.PageManager">
+        SELECT
+        DISTINCT(t1.id),
+        t1.created_by,
+        t1.created_time,
+        t1.updated_time,
+        t1.updated_by,
+        t1.deleted_flag,
+        t1.page_unique_id, t1.version_id, t1.page_name, t1.channel_no, t1.business_type, t1.folder_id, t1.is_folder,
+        t1.status, t1.sort_no, t1.change_status, t1.page_tags, t1.operator_ids, t1.router_name
+        FROM page_manager t1 LEFT JOIN page_module t2 ON t1.id=t2.page_id
+        WHERE t1.deleted_flag=0 AND t2.deleted_flag=0 AND t1.status!=2 AND t2.module_type=#{moduleType} AND t1.channel_no=#{channelNo}
+        <if test="null != versionId">
+            AND t1.version_id=#{versionId}
+        </if>
+    </select>
+</mapper>

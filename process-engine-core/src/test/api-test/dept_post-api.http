@@ -1,0 +1,97 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://{{host}}/department/add
+Content-Type: application/json
+channelNo: CN00001
+Authorization: {{auth}}
+
+{
+  "name": "开发部门"
+}
+
+### 添加部门
+
+PUT http://{{host}}/department/edit
+Content-Type: application/json
+channelNo: CN00001
+Authorization: {{auth}}
+
+{
+  "id": 1352540774162575361,
+  "name": "技术部"
+}
+
+### 编辑部门
+
+DELETE http://{{host}}/department/delete/1349644132589518850
+Content-Type: application/json
+channelNo: CN59964
+Authorization: {{auth}}
+
+{}
+
+### 删除部门
+
+
+POST http://{{host}}/postJob/add
+Content-Type: application/json
+channelNo: CN00001
+Authorization: {{auth}}
+
+{
+  "name": "Java开发工程师",
+  "deptId": 1352540774162575361
+}
+
+### 添加岗位
+
+PUT http://{{host}}/postJob/edit
+Content-Type: application/json
+channelNo: CN0001
+Authorization: {{auth}}
+
+{
+  "id": "1351721438588968961",
+  "realName": "无天",
+  "staffStatus": 0,
+  "deptId": "1351481467659694082",
+  "postJobId": "1351481688737263618",
+  "code": "",
+  "mobileNo": "14312121222",
+  "email": "wt@employee.com"
+}
+
+### 编辑岗位
+
+DELETE http://{{host}}/postJob/delete/1346303624404348929
+Content-Type: application/json
+channelNo: CN59964
+Authorization: {{auth}}
+
+{}
+
+### 删除岗位
+
+GET http://{{host}}/department/treeList?departmentId=
+Content-Type: application/json
+channelNo: CN00001
+Authorization: {{auth}}
+
+{}
+
+### 分页查询部门
+
+GET http://{{host}}/department/list?departmentName=
+Content-Type: application/json
+channelNo: CN00001
+Authorization: {{auth}}
+
+{}
+
+### 查询部门列表

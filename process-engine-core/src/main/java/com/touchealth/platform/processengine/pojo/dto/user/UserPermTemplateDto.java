@@ -1,0 +1,16 @@
+package com.touchealth.platform.processengine.pojo.dto.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserPermTemplateDto {
+
+    private Long templateId;
+    private Long postJobId;
+    private String templateName;
+
+}

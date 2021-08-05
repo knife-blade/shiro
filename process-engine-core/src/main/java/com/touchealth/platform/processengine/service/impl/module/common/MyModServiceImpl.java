@@ -1,0 +1,267 @@
+package com.touchealth.platform.processengine.service.impl.module.common;
+
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.touchealth.platform.processengine.annotation.TransactionalForException;
+import com.touchealth.platform.processengine.constant.CommonConstant;
+import com.touchealth.platform.processengine.dao.module.common.MyModDao;
+import com.touchealth.platform.processengine.entity.module.common.MyMod;
+import com.touchealth.platform.processengine.entity.module.common.MyModImg;
+import com.touchealth.platform.processengine.entity.page.PageManager;
+import com.touchealth.platform.processengine.exception.CommonModuleException;
+import com.touchealth.platform.processengine.handler.ModuleHandler;
+import com.touchealth.platform.processengine.pojo.bo.WebJsonBo;
+import com.touchealth.platform.processengine.pojo.bo.module.common.MyModBo;
+import com.touchealth.platform.processengine.pojo.bo.module.common.MyModImgBo;
+import com.touchealth.platform.processengine.pojo.dto.module.common.LinkDto;
+import com.touchealth.platform.processengine.service.impl.module.BaseModuleServiceImpl;
+import com.touchealth.platform.processengine.service.module.common.LinkService;
+import com.touchealth.platform.processengine.service.module.common.MyModImgService;
+import com.touchealth.platform.processengine.service.module.common.MyModService;
+import com.touchealth.platform.processengine.service.page.PageManagerService;
+import com.touchealth.platform.processengine.service.page.PlatformVersionService;
+import com.touchealth.platform.processengine.utils.BaseHelper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <p>
+ * 我的模块组件表 服务实现类
+ * </p>
+ *
+ * @author lvx
+ * @since 2021-01-14
+ */
+@Service
+@Slf4j
+public class MyModServiceImpl extends BaseModuleServiceImpl<MyModDao, MyMod> implements MyModService {
+
+    @Resource
+    private PageManagerService pageManagerService;
+
+    @Resource
+    private PlatformVersionService platformVersionService;
+
+    @Resource
+    private LinkService linkService;
+
+    @Resource
+    private MyModImgService myModImgService;
+
+    @Override
+    @TransactionalForException
+    public String savePageModule(String webJson, Long pageId) {
+        PageManager page = pageManagerService.getById(pageId);
+        Assert.notNull(page, "页面不存在");
+        MyModBo myModBo = ModuleHandler.parseMyMod(page, webJson);
+
+        return save(myModBo);
+    }
+
+    public String save(MyModBo bo) {
+        // 添加我的模块组件
+        bo.setId(null);
+        MyMod myMod = BaseHelper.r2t(bo, MyMod.class);
+        myMod.setCategoryId(CommonConstant.MODULE_CATEGORY.COMMON.getCode());
+        boolean saveFlag = save(myMod);
+        if (!saveFlag) {
+            log.error("MyModServiceImpl.save my mod fail. param: {}", bo);
+            throw new CommonModuleException("添加我的模块组件失败");
+        }
+
+        List<MyModImgBo> myModImgBos = bo.getMyModImgs();
+        // 添加图片
+        List<MyModImg> myModImgs = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(myModImgBos)) {
+            myModImgBos.forEach(img -> {
+                img.setId(null);
+                MyModImg myModImg = BaseHelper.r2t(img, MyModImg.class);
+                myModImg.setChannelNo(myMod.getChannelNo());
+                myModImg.setMyModId(myMod.getId());
+                myModImg.setPageId(myMod.getPageId());
+                myModImg.setVersion(myMod.getVersion());
+                myModImg.setStatus(myMod.getStatus());
+                myModImg.setUrl(img.getUrl());
+                LinkDto linkDto = img.getLinkDto();
+                if (linkDto != null) {
+                    // 添加链接
+                    linkDto.setChannelNo(myMod.getChannelNo());
+                    linkDto.setVersion(myMod.getVersion());
+                    linkDto.setPageId(myMod.getPageId());
+                    linkDto.setStatus(myMod.getStatus());
+                    LinkDto linkDto1 = linkService.save(linkDto);
+                    Long linkId = linkDto1.getId();
+                    myModImg.setLinkModuleId(linkId);
+                }
+                myModImgs.add(myModImg);
+            });
+            boolean saveImgFlag = myModImgService.saveBatch(myModImgs);
+            if (!saveImgFlag) {
+                log.error("MyModServiceImpl save images fail. param: {}", bo);
+                throw new CommonModuleException("保存图片失败");
+            }
+        }
+
+        // 更新我的模块组件中的webJson里的图片ID
+        WebJsonBo webJson = JSONObject.parseObject(myMod.getWebJson(), WebJsonBo.class);
+        if (webJson != null) {
+            webJson.setId(myMod.getId());
+            webJson.setModuleUniqueId(myMod.getModuleUniqueId());
+            updateWebJson(myModImgs, webJson);
+            myMod.setWebJson(JSONObject.toJSONString(webJson));
+            saveFlag = saveOrUpdate(myMod);
+            if (!saveFlag) {
+                log.error("MyModServiceImpl.save update my mod webJson fail. param: {}", bo);
+                throw new CommonModuleException("添加我的模块组件失败");
+            }
+
+            return JSONObject.toJSONString(webJson);
+        }
+
+        return null;
+    }
+
+    @Override
+    @TransactionalForException
+    public String clonePageModule(Long moduleId, Long pageId) {
+        PageManager page = pageManagerService.getById(pageId);
+
+        Assert.notNull(page, "页面不存在");
+        Long versionId = page.getVersionId();
+
+        Assert.notNull(platformVersionService.getById(versionId), "无效的版本号");
+
+        MyMod myMod = getById(moduleId);
+        Assert.notNull(myMod, "我的模块组件不存在");
+
+        // 更新前端数据字符串（webJson）
+        String webJson = myMod.getWebJson();
+        if (StringUtils.isEmpty(webJson)) {
+            return "";
+        }
+
+        return savePageModule(webJson, pageId);
+    }
+
+    @Override
+    @TransactionalForException
+    public String updatePageModule(String webJson) {
+        MyModBo bo = ModuleHandler.parseMyMod(null, webJson);
+        Long myModId = bo.getId();
+        List<MyModImgBo> imgBos = bo.getMyModImgs();
+
+        // 更新我的模块组件
+        MyMod myMod = getById(myModId);
+        if (myMod == null) {
+            throw new CommonModuleException("我的模块组件不存在");
+        }
+        BaseHelper.copyNotNullProperties(bo, myMod);
+        if (!updateById(myMod)) {
+            log.error("MyModServiceImpl.updatePageModule update my mod fail. param: {}", bo);
+            throw new CommonModuleException("更新我的模块组件失败");
+        }
+
+        List<MyModImg> addOrUpdImgList = new ArrayList<>();
+        // 更新图片
+        if (!CollectionUtils.isEmpty(imgBos)) {
+            List<Long> delImgList = new ArrayList<>();
+            Map<Long, MyModImg> updMyModImgMap = new HashMap<>();
+            QueryWrapper<MyModImg> qw = Wrappers.<MyModImg>query()
+                    .eq("my_mod_id", myModId);
+            List<MyModImg> myModImgs = myModImgService.baseFindList(qw);
+
+            // 将所有需要更新的图片放到一个Map中
+            for (MyModImgBo myModBo : imgBos) {
+                Long imgId = myModBo.getId();
+                MyModImg myModImg = BaseHelper.r2t(myModBo, MyModImg.class);
+                myModImg.setChannelNo(myMod.getChannelNo());
+                myModImg.setVersion(myMod.getVersion());
+                myModImg.setMyModId(myModId);
+                myModImg.setPageId(myMod.getPageId());
+                myModImg.setStatus(myMod.getStatus());
+                LinkDto linkDto = myModBo.getLinkDto();
+                if (linkDto != null) {
+                    // 添加|更新 链接
+                    linkDto.setChannelNo(myMod.getChannelNo());
+                    linkDto.setPageId(myMod.getPageId());
+                    linkDto.setStatus(myMod.getStatus());
+                    linkDto.setVersion(myMod.getVersion());
+                    if (linkDto.getId() == null) {
+                        LinkDto linkDto1 = linkService.save(linkDto);
+                        Long linkId = linkDto1.getId();
+                        myModImg.setLinkModuleId(linkId);
+                    } else {
+                        LinkDto updLink = linkService.update(linkDto);
+                        if (updLink == null) {
+                            log.error("MyModServiceImpl.updatePageModule update link fail. param: {}", linkDto);
+                        }
+                    }
+                }
+                // 新增或修改的图片
+                addOrUpdImgList.add(myModImg);
+                if (imgId != null) {
+                    // 需要更新的图片
+                    updMyModImgMap.put(imgId, myModImg);
+                }
+            }
+            // 将数据库中存在编辑后不存在的图片删除
+            myModImgs.forEach(e -> {
+                Long id = e.getId();
+                MyModImg myModImg = updMyModImgMap.get(id);
+                if (myModImg == null) {
+                    delImgList.add(e.getId());
+                }
+            });
+            boolean updImgFlag = myModImgService.saveOrUpdateBatch(addOrUpdImgList);
+            // 修改到回收站状态
+            boolean delImgFlag = true;
+            if (!CollectionUtils.isEmpty(delImgList)) {
+                delImgFlag = myModImgService.update(null,
+                        Wrappers.<MyModImg>lambdaUpdate().in(MyModImg::getId, delImgList).set(MyModImg::getUpdatedTime, LocalDateTime.now()).set(MyModImg::getDeletedFlag, 1));
+            }
+            if (!updImgFlag || !delImgFlag) {
+                log.error("MyModServiceImpl.updatePageModule fail. param: {}", bo);
+                throw new CommonModuleException("更新我的模块组件失败");
+            }
+        }
+        // 更新webJson
+        WebJsonBo updateWebJson = JSONObject.parseObject(myMod.getWebJson(), WebJsonBo.class);
+        updateWebJson(addOrUpdImgList, updateWebJson);
+        myMod.setWebJson(JSONObject.toJSONString(updateWebJson));
+        if (!saveOrUpdate(myMod)) {
+            log.error("MyModServiceImpl.updatePageModule update webJson fail. param: {}", bo);
+            throw new CommonModuleException("修改我的模块组件失败");
+        }
+
+        return JSONObject.toJSONString(updateWebJson);
+    }
+
+    private void updateWebJson(List<MyModImg> myModImgs, WebJsonBo webJson) {
+        if (!CollectionUtils.isEmpty(myModImgs)) {
+            List<WebJsonBo.WebJsonImgBo> imgWebJsonList = webJson.getData().getImgList();
+            for (int i = 0; i < imgWebJsonList.size() && imgWebJsonList.size() == myModImgs.size(); i++) {
+                // 更新图片的webJson字段中的按钮ID
+                WebJsonBo.WebJsonImgBo webJsonImgBo = imgWebJsonList.get(i);
+                MyModImg myModImg = myModImgs.get(i);
+                webJsonImgBo.setId(myModImg.getId());
+                webJsonImgBo.setModuleUniqueId(myModImg.getModuleUniqueId());
+                // 更新按钮链接ID
+                WebJsonBo.WebJsonLinkBo link = webJsonImgBo.getLink();
+                if (link != null) {
+                    link.setId(myModImg.getLinkModuleId());
+                }
+            }
+        }
+    }
+}

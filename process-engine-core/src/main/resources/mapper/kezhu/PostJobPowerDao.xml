@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchealth.platform.processengine.dao.kezhu.PostJobPowerDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.touchealth.platform.processengine.entity.kezhu.PostJobPower">
+        <result column="id" property="id" />
+        <result column="channel_no" property="channelNo" />
+        <result column="post_job_id" property="postJobId" />
+        <result column="post_job_name" property="postJobName" />
+        <result column="hospital_id" property="hospitalId" />
+        <result column="hospital_name" property="hospitalName" />
+        <result column="branch_id" property="branchId" />
+        <result column="branch_name" property="branchName" />
+        <result column="open_order" property="openOrder" />
+        <result column="open_invoice" property="openInvoice" />
+        <result column="open_stock" property="openStock" />
+        <result column="open_data" property="openData" />
+        <result column="open_group" property="openGroup" />
+        <result column="open_message" property="openMessage" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        channel_no, post_job_id, post_job_name, hospital_id, hospital_name, branch_id,branch_name,
+        open_order,open_invoice,open_stock,open_data,open_group,open_message
+    </sql>
+
+</mapper>

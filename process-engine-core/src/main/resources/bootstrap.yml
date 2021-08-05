@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: test1
+  application:
+    name: process-engine
+  cloud:
+    zookeeper:
+      client:
+        sasl: false
+      enabled: true
+      # 若使用了SpringCloudConfigZookeeper，则connect-string和config必须配置在bootstrap.yml中。（https://cloud.spring.io/spring-cloud-static/Finchley.SR4/single/spring-cloud.html#_registering_with_zookeeper）
+      connect-string: 192.168.137.160:2181,192.168.137.161:2181,192.168.137.162:2181
+      config:
+        root: /process-engine/config
+        enabled: true
+        watcher:
+          enabled: true
+      discovery:
+        register: true
+        root: touc-conf
+        preferIpAddress: true

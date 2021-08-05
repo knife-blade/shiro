@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.touchealth.platform.processengine.dao.module.common.LoginDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.touchealth.platform.processengine.entity.module.common.Login">
+        <result column="id" property="id" />
+        <result column="created_time" property="createdTime" />
+        <result column="created_by" property="createdBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="deleted_flag" property="deletedFlag" />
+        <result column="module_unique_id" property="moduleUniqueId" />
+        <result column="channel_no" property="channelNo" />
+        <result column="title_chinese" property="titleChinese" />
+        <result column="subtitle_chinese" property="subtitleChinese" />
+        <result column="agreement_url_chinese" property="agreementUrlChinese" />
+        <result column="privacy_agreement_url_chinese" property="privacyAgreementUrlChinese" />
+        <result column="title_eng" property="titleEng" />
+        <result column="subtitle_eng" property="subtitleEng" />
+        <result column="agreement_url_eng" property="agreementUrlEng" />
+        <result column="privacy_agreement_url_eng" property="privacyAgreementUrlEng" />
+        <result column="category_id" property="categoryId" />
+        <result column="page_id" property="pageId" />
+        <result column="status" property="status" />
+        <result column="web_json" property="webJson" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        deleted_flag,
+        module_unique_id, channel_no, title_chinese, subtitle_chinese, agreement_url_chinese, privacy_agreement_url_chinese, title_eng, subtitle_eng, agreement_url_eng, privacy_agreement_url_eng, category_id, page_id, status, web_json, version
+    </sql>
+
+</mapper>
