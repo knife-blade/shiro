@@ -1,0 +1,1 @@
+此sql脚本与shiro_2_db.sql相同

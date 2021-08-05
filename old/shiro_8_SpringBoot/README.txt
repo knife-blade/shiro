@@ -1,0 +1,2 @@
+1.与shiro_6_example和shiro_7_url的sql一致。
+2.此工程不能采用导入的形式，而是要创建SpringBoot工程，然后把源文件复制进去。
