@@ -9,7 +9,7 @@ CREATE TABLE `t_user`
     `avatar`          varchar(255),
     `email`           varchar(64),
     `password`        varchar(64),
-    `status`          int(0) NOT NULL, -- 0：正常 1：被锁定
+    `status`          int(0) NOT NULL DEFAULT 0, -- 0：正常 1：被锁定
     `last_login_time` datetime(0),
     `create_time`     datetime(0),
     `update_time`     datetime(0),
