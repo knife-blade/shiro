@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.how2java</groupId>
-    <artifactId>shiro</artifactId>
+    <artifactId>shiro_8_SpringBoot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>shiro</name>
     <description>Demo project for Spring Boot</description>
