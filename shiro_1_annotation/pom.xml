@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>shiro_without_cache</artifactId>
+    <artifactId>shiro_1_annotation</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shiro_without_cache</name>
-    <description>shiro_without_cache</description>
+    <name>shiro_1_annotation</name>
+    <description>shiro_1_annotation</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
