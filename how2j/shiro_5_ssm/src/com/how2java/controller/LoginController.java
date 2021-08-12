@@ -14,22 +14,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("")
 public class LoginController {
-	@RequestMapping(value="/login",method=RequestMethod.POST) 
-	public String login(Model model,String name, String password) {
-        Subject subject = SecurityUtils.getSubject();  
-        UsernamePasswordToken token = new UsernamePasswordToken(name, password);  
-        try {  
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(Model model, String name, String password) {
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(name, password);
+        try {
             subject.login(token);
-            Session session=subject.getSession();
+            Session session = subject.getSession();
             session.setAttribute("subject", subject);
             return "redirect:index";
-            
-        } catch (AuthenticationException e) {  
-            model.addAttribute("error", "验证失败");  
-            return "login"; 
-        }  
-	}
-	
-
-
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", "验证失败");
+            return "login";
+        }
+    }
 }

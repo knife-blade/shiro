@@ -15,7 +15,7 @@ public class TestEncryption {
 		
 		
 		
-		System.out.printf("Ô­Ê¼ÃÜÂëÊÇ %s , ÑÎÊÇ£º %s, ÔËËã´ÎÊıÊÇ£º %d, ÔËËã³öÀ´µÄÃÜÎÄÊÇ£º%s ",password,salt,times,encodedPassword);
+		System.out.printf("åŸå§‹å¯†ç æ˜¯ %s , ç›æ˜¯ï¼š %s, è¿ç®—æ¬¡æ•°æ˜¯ï¼š %d, è¿ç®—å‡ºæ¥çš„å¯†æ–‡æ˜¯ï¼š%s ",password,salt,times,encodedPassword);
 		
 	}
 }
