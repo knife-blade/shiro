@@ -5,7 +5,20 @@ spring:
     username: root
     password: 222333
 
-# mybatis-plus????????????SQL??
+# mybatis-plus打印SQL日志
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+shiro:
+  enabled: true       # 开启 shiro 配置，默认为 true
+  web:
+    enabled: true     # 开启 shiro Web 配置，默认为 true
+  loginUrl: /login    # 登录地址，默认为"login.jsp"
+  successUrl: /index  # 登录成功后跳转的地址，默认为"/"
+  unauthorizedUrl: /unauthorized    # 配置未获授权默认跳转地址
+  sessionManager:
+    sessionIdCookieEnabled: true       # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
+    sessionIdUrlRewritingEnabled: true # 是否允许通过 URL 参数实现会话跟踪，默认为 true。若网站支持 Cookie，可以关闭此选项。
+
+
