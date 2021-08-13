@@ -20,7 +20,7 @@ public interface PermissionMapper extends BaseMapper<Permission> {
             "    t_role_permission_mid, " +
             "    t_permission " +
             "WHERE " +
-            "    t_user.`name` = ${userName}  " +
+            "    t_user.`user_name` = #{userName}  " +
             "    AND t_user.id = t_user_role_mid.user_id  " +
             "    AND t_user_role_mid.id = t_role.id " +
             "    AND t_role.id = t_role_permission_mid.role_id " +

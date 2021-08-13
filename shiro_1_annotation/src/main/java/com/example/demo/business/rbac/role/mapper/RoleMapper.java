@@ -17,7 +17,7 @@ public interface RoleMapper extends BaseMapper<Role> {
             "    t_user_role_mid, " +
             "    t_role " +
             "WHERE " +
-            "    t_user.`name` = #{userName}  " +
+            "    t_user.`user_name` = #{userName}  " +
             "    AND t_user.id = t_user_role_mid.user_id  " +
             "    AND t_user_role_mid.id = t_role.id " +
             "    ")

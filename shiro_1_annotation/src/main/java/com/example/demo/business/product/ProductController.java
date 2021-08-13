@@ -12,27 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("product")
 public class ProductController {
-    @RequiresPermissions("*:product:add")
+    @RequiresPermissions("product:add")
     @ApiOperation(value="增加产品")
     @PostMapping("add")
     public String add() {
         return "add success";
     }
 
-    @RequiresPermissions("*:product:delete")
+    @RequiresPermissions("product:delete")
     @ApiOperation(value="删除产品")
     @PostMapping("delete")
     public String delete() {
         return "delete success";
     }
-    @RequiresPermissions("*:product:edit")
+    @RequiresPermissions("product:edit")
     @ApiOperation(value="编辑产品")
     @PostMapping("edit")
     public String edit() {
         return "edit success";
     }
 
-    @RequiresPermissions("*:product:view")
+    @RequiresPermissions("product:view")
     @ApiOperation(value="查看产品")
     @GetMapping("view")
     public String view() {
