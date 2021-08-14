@@ -1,8 +1,11 @@
 ### 项目描述
-本项目测试最基本的Shiro控制。
-- 使用Shiro的默认的session控制。
-- 全部使用注解控制。
-- 有角色、资源权限两种方式。
+- 本项目测试最基本的Shiro控制。
+- 使用Shiro默认的session来管理权限。
+- 使用角色和资源权限两种方式。（注解的方式）
+- 使用Shiro默认的过滤器。
+- 使用Knife4j测试接口（Swagger的升级版）。
+- 不使用缓存
+- 使用shiro-spring-boot-web-starter:1.7.0
 
 ### 角色的权限
 - admin有所有权限
