@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>shiro_1_annotation</artifactId>
+    <artifactId>shiro_session</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shiro_1_annotation</name>
-    <description>shiro_1_annotation</description>
+    <name>shiro_session</name>
+    <description>shiro_session</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
