@@ -19,6 +19,6 @@ shiro:
   unauthorizedUrl: /unauthorized    # 未获授权默认跳转地址
   sessionManager:
     sessionIdCookieEnabled: true       # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
-    sessionIdUrlRewritingEnabled: true # 是否允许通过 URL 参数实现会话跟踪，默认为 true。若网站支持 Cookie，可以关闭此选项。
+    sessionIdUrlRewritingEnabled: true # 是否允许通过 URL 参数实现会话跟踪，默认为 true。若网站支持 Cookie，可关闭此选项。
 
 
