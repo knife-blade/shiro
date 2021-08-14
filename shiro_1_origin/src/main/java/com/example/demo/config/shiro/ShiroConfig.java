@@ -30,7 +30,8 @@ public class ShiroConfig {
         return chainDefinition;
     }
 
-    @Bean
+    // 名字必须是securityManager
+    @Bean(name = "securityManager")
     public SessionsSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //设置realm.
@@ -39,6 +40,7 @@ public class ShiroConfig {
         return securityManager;
     }
 
+    // 名字必须是sessionManager
     @Bean(name = "sessionManager")
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
@@ -74,7 +76,7 @@ public class ShiroConfig {
 
     /**
      * 开启shiro aop注解支持.
-     * 使用代理方式;所以需要开启代码支持;
+     * 使用代理方式，所以需要开启代码支持;
      *
      * @param securityManager
      * @return
