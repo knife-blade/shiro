@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,7 @@ public class OrderController {
         return "add success";
     }
 
+    // 管理员或者订单管理员有权限
     @RequiresRoles(value = {"admin,orderManager"}, logical = Logical.OR)
     @ApiOperation(value="删除订单")
     @PostMapping("delete")

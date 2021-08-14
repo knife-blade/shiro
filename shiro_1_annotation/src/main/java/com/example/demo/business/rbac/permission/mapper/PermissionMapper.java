@@ -22,7 +22,7 @@ public interface PermissionMapper extends BaseMapper<Permission> {
             "WHERE " +
             "    t_user.`user_name` = #{userName}  " +
             "    AND t_user.id = t_user_role_mid.user_id  " +
-            "    AND t_user_role_mid.id = t_role.id " +
+            "    AND t_user_role_mid.role_id = t_role.id " +
             "    AND t_role.id = t_role_permission_mid.role_id " +
             "    AND t_role_permission_mid.permission_id = t_permission.id")
     Set<String> getPermissionsByUserName(@Param("userName") String userName);
