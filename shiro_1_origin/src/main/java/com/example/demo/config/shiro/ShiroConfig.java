@@ -60,7 +60,7 @@ public class ShiroConfig {
     /**
      * 凭证匹配器
      * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
-     * 所以我们需要修改下doGetAuthenticationInfo中的代码;）
+     *   所以我们需要修改下doGetAuthenticationInfo中的代码）
      *
      * @return
      */
@@ -76,8 +76,8 @@ public class ShiroConfig {
     }
 
     /**
-     * 开启shiro aop注解支持.
-     * 使用代理方式，所以需要开启代码支持;
+     * 支持shiro 注解。
+     * 也可以在pom.xml里引入此依赖：org.springframework.boot:spring-boot-starter-aop
      *
      * @param securityManager
      * @return
