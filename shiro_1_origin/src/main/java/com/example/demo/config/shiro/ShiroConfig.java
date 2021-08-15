@@ -37,6 +37,7 @@ public class ShiroConfig {
         //设置realm.
         securityManager.setRealm(getDatabaseRealm());
         securityManager.setSessionManager(sessionManager());
+        // securityManager.setCacheManager();  //支持缓存
         return securityManager;
     }
 
