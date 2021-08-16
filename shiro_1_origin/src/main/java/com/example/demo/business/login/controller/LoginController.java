@@ -33,8 +33,12 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            Session session = subject.getSession();
-            session.setAttribute("subject", subject);
+            // 这个没用，不要打开。若打开，在使用shiro-redis时会序列化失败，因为这个subject是
+            // WebDelegatingSubject类型，没实现serializable接口。若想往session里放东西，必须
+            // 实现Serializable接口。
+            // 当然，本项目没有用到shiro-redis进行序列化，只是提示一下。
+            // Session session = subject.getSession();
+            // session.setAttribute("subject", subject);
             return fillResult(userName);
         } catch (AuthenticationException e) {
             throw new BusinessException("身份验证失败");
