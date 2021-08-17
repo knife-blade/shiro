@@ -28,8 +28,6 @@ shiro-redis:
     password: 222333
   cache-manager:
     key-prefix: "shiro:cache:"
-    expire: 1800       # 单位：秒
+    expire: 600     # 单位：秒
   session-dao:
     key-prefix: "shiro:session:"
-
-
