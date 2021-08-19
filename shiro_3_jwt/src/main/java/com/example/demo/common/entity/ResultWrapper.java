@@ -18,26 +18,27 @@ public class ResultWrapper<T> {
 
     public ResultWrapper(boolean success) {
         this.success = success;
-
     }
 
-    @SuppressWarnings({"rawtypes"})
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R success(boolean success) {
+        ResultWrapper<R> resultWrapper = new ResultWrapper<>(success);
         if (success) {
-            return success();
+            resultWrapper.code = ResponseCode.SUCCESS.getCode();
         } else {
-            return failure();
+            resultWrapper.code = ResponseCode.SYSTEM_FAILURE.getCode();
         }
+        return (R) resultWrapper;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R success() {
-        return (R) success(true).code(ResponseCode.SUCCESS.getCode());
+        return (R) success(true);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R failure() {
-        return (R) success(false).code(ResponseCode.SYSTEM_FAILURE.getCode());
+        return (R) success(false);
     }
 
     /**
