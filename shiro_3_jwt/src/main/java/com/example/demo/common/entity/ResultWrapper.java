@@ -1,10 +1,13 @@
 package com.example.demo.common.entity;
 
+import com.example.demo.common.constant.ResponseCode;
 import lombok.Data;
 
 @Data
 public class ResultWrapper<T> {
     private boolean success;
+
+    private int code;
 
     private String message;
 
@@ -19,17 +22,32 @@ public class ResultWrapper<T> {
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R success(boolean success) {
-        return (R) new ResultWrapper(success);
+        ResultWrapper<R> resultWrapper = new ResultWrapper<>(success);
+        if (success) {
+            resultWrapper.code = ResponseCode.SUCCESS.getCode();
+        } else {
+            resultWrapper.code = ResponseCode.SYSTEM_FAILURE.getCode();
+        }
+        return (R) resultWrapper;
     }
 
-    @SuppressWarnings({"rawtypes"})
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R success() {
-        return success(true);
+        return (R) success(true);
     }
 
-    @SuppressWarnings({"rawtypes"})
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <R extends ResultWrapper> R failure() {
-        return success(false);
+        return (R) success(false);
+    }
+
+    /**
+     * @param code {@link ResponseCode#getCode()}
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public <R extends ResultWrapper> R code(int code) {
+        this.code = code;
+        return (R) this;
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
