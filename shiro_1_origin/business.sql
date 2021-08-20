@@ -2,11 +2,11 @@ DROP DATABASE IF EXISTS shiro;
 CREATE DATABASE shiro DEFAULT CHARACTER SET utf8;
 USE shiro;
 
-drop table if exists t_user;
-drop table if exists t_role;
-drop table if exists t_permission;
-drop table if exists t_user_role_mid;
-drop table if exists t_role_permission_mid;
+DROP TABLE IF EXISTS t_user;
+DROP TABLE IF EXISTS t_role;
+DROP TABLE IF EXISTS t_permission;
+DROP TABLE IF EXISTS t_user_role_mid;
+DROP TABLE IF EXISTS t_role_permission_mid;
 
 create table t_user (
   id bigint AUTO_INCREMENT,
