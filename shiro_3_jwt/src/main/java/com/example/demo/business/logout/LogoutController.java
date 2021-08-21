@@ -1,6 +1,6 @@
 package com.example.demo.business.logout;
 
-import com.example.demo.common.entity.ResultWrapper;
+import com.example.demo.common.entity.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -13,8 +13,8 @@ public class LogoutController {
 
     @ApiOperation("登出")
     @PostMapping("logout")
-    public ResultWrapper<Object> logout() {
+    public Result<Object> logout() {
         SecurityUtils.getSubject().logout();
-        return ResultWrapper.success();
+        return new Result();
     }
 }

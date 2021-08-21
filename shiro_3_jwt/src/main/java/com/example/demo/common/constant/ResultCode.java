@@ -1,6 +1,6 @@
 package com.example.demo.common.constant;
 
-public enum ResponseCode {
+public enum ResultCode {
     SUCCESS(1000, "访问成功"),
     SYSTEM_FAILURE(1001, "系统异常"),
     ;
@@ -8,7 +8,7 @@ public enum ResponseCode {
     private final int code;
     private final String description;
 
-    ResponseCode(int code, String description) {
+    ResultCode(int code, String description) {
         this.code = code;
         this.description = description;
     }

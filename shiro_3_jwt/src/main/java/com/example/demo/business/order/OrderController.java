@@ -1,5 +1,6 @@
 package com.example.demo.business.order;
 
+import com.example.demo.common.entity.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
@@ -17,29 +18,30 @@ public class OrderController {
     @RequiresPermissions("order:add")
     @ApiOperation(value="增加订单")
     @PostMapping("add")
-    public String add() {
-        return "add success";
+    public Result add() {
+        return new Result<>().message("order:add success");
+    }
+
+    @RequiresRoles(value = {"admin", "orderManager"}, logical = Logical.OR)
+    @ApiOperation(value="删除订单")
+    @PostMapping("delete")
+    public Result delete() {
+        return new Result<>().message("order:delete success");
     }
 
     // 管理员或者订单管理员有权限
-    @RequiresRoles(value = {"admin,orderManager"}, logical = Logical.OR)
-    @ApiOperation(value="删除订单")
-    @PostMapping("delete")
-    public String delete() {
-        return "delete success";
-    }
-
-    @RequiresPermissions("order:edit")
+    @RequiresRoles(value = {"admin", "productManager"}, logical = Logical.OR)
     @ApiOperation(value="编辑订单")
     @PostMapping("edit")
-    public String edit() {
-        return "edit success";
+    public Result edit() {
+        return new Result<>().message("order:edit success");
     }
 
     @RequiresPermissions("order:view")
+    @RequiresRoles(value = {"admin,productManager"}, logical = Logical.OR)
     @ApiOperation(value="查看订单")
     @GetMapping("view")
-    public String view() {
-        return "view success";
+    public Result view() {
+        return new Result<>().message("order:view success");
     }
 }
