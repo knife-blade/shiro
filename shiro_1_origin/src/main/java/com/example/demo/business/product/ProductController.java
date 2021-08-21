@@ -1,5 +1,6 @@
 package com.example.demo.business.product;
 
+import com.example.demo.common.entity.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -15,27 +16,28 @@ public class ProductController {
     @RequiresPermissions("product:add")
     @ApiOperation(value="增加产品")
     @PostMapping("add")
-    public String add() {
-        return "add success";
+    public Result add() {
+        return new Result<>().message("product:add");
     }
 
     @RequiresPermissions("product:delete")
     @ApiOperation(value="删除产品")
     @PostMapping("delete")
-    public String delete() {
-        return "delete success";
+    public Result delete() {
+        return new Result<>().message("product:delete");
     }
+
     @RequiresPermissions("product:edit")
     @ApiOperation(value="编辑产品")
     @PostMapping("edit")
-    public String edit() {
-        return "edit success";
+    public Result edit() {
+        return new Result<>().message("product:edit");
     }
 
     @RequiresPermissions("product:view")
     @ApiOperation(value="查看产品")
     @GetMapping("view")
-    public String view() {
-        return "view success";
+    public Result view() {
+        return new Result<>().message("product:view");
     }
 }

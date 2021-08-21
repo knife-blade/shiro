@@ -7,11 +7,13 @@ import com.example.demo.business.rbac.user.service.UserService;
 import com.example.demo.common.exception.BusinessException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,10 @@ public class LoginController {
     public LoginVO login(@RequestBody LoginRequest loginRequest) {
         String userName = loginRequest.getUserName();
         String password = loginRequest.getPassword();
+
+        Assert.hasText(userName, "用户名不能为空");
+        Assert.hasText(password, "密码不能为空");
+
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
 
         Subject subject = SecurityUtils.getSubject();

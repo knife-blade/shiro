@@ -62,19 +62,18 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return ResultWrapper.success().data(body);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResultWrapper handleException(Exception e) {
-        log.error(e.getMessage(), e);
-
-        if (e instanceof BusinessException) {
-            return ResultWrapper.failure().message(e.getMessage());
-        }
-
-        // 实际项目中应该这样写，防止用户看到详细的异常信息
-        // return ResultWrapper.failure().message("操作失败");
-        return ResultWrapper.failure().message(e.getMessage());
-    }
-
+    // @ExceptionHandler(Exception.class)
+    // public ResultWrapper handleException(Exception e) {
+    //     log.error(e.getMessage(), e);
+    //
+    //     if (e instanceof BusinessException) {
+    //         return ResultWrapper.failure().message(e.getMessage());
+    //     }
+    //
+    //     // 实际项目中应该这样写，防止用户看到详细的异常信息
+    //     // return ResultWrapper.failure().message("操作失败");
+    //     return ResultWrapper.failure().message(e.getMessage());
+    // }
 
     private boolean isKnife4jUrl(String uri) {
         AntPathMatcher pathMatcher = new AntPathMatcher();

@@ -5,6 +5,7 @@ import com.example.demo.business.rbac.role.service.RoleService;
 import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
 import com.example.demo.common.exception.BusinessException;
+import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -28,6 +29,12 @@ public class DatabaseRealm extends AuthorizingRealm {
     @Lazy
     @Autowired
     private PermissionService permissionService;
+
+    //使realm支持jwt的认证方案
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
 
     // 登录认证
     @Override

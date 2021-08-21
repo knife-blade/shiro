@@ -1,6 +1,6 @@
 package com.example.demo.common.advice;
 
-import com.example.demo.common.entity.ResultWrapper;
+import com.example.demo.common.entity.Result;
 import com.example.demo.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
     @ExceptionHandler(Exception.class)
-    public ResultWrapper handleException(Exception e) throws Exception {
+    public Result<Object> handleException(Exception e) throws Exception {
         log.error(e.getMessage(), e);
 
         // 如果某个自定义异常有@ResponseStatus注解，就继续抛出
@@ -24,12 +24,12 @@ public class GlobalExceptionAdvice {
         }
 
         // 实际项目中应该这样写，防止用户看到详细的异常信息
-        // return ResultWrapper.failure().message("操作失败");
-        return ResultWrapper.failure().message(e.getMessage());
+        // return new Result().failure().message.message("操作失败");
+        return new Result<>().failure().message(e.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResultWrapper handleBusinessException(Exception e) throws Exception {
+    public Result<Object> handleBusinessException(Exception e) throws Exception {
         log.error(e.getMessage(), e);
 
         // 如果某个自定义异常有@ResponseStatus注解，就继续抛出
@@ -38,7 +38,7 @@ public class GlobalExceptionAdvice {
         }
 
         // 实际项目中应该这样写，防止用户看到详细的异常信息
-        // return ResultWrapper.failure().message("操作失败");
-        return ResultWrapper.failure().message(e.getMessage());
+        // return new Result<>().failure().message("操作失败");
+        return new Result<>().failure().message(e.getMessage());
     }
 }
