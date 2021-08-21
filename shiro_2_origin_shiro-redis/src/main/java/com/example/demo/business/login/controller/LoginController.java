@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +32,10 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
-            // 这个没用，不要打开。若打开，会导致shiro-redis序列化失败，因为这个subject是
+            // 这个没用，不要打开。若打开，在使用shiro-redis时会序列化失败，因为这个subject是
             // WebDelegatingSubject类型，没实现serializable接口。若想往session里放东西，必须
             // 实现Serializable接口。
+            // 当然，本项目没有用到shiro-redis进行序列化，只是提示一下。
             // Session session = subject.getSession();
             // session.setAttribute("subject", subject);
             return fillResult(userName);

@@ -22,7 +22,7 @@ public class OrderController {
         return new Result<>().message("order:add success");
     }
 
-    @RequiresPermissions("order:delete")
+    @RequiresRoles(value = {"admin", "orderManager"}, logical = Logical.OR)
     @ApiOperation(value="删除订单")
     @PostMapping("delete")
     public Result delete() {
@@ -30,7 +30,7 @@ public class OrderController {
     }
 
     // 管理员或者订单管理员有权限
-    @RequiresRoles(value = {"admin,productManager"}, logical = Logical.OR)
+    @RequiresRoles(value = {"admin", "productManager"}, logical = Logical.OR)
     @ApiOperation(value="编辑订单")
     @PostMapping("edit")
     public Result edit() {
