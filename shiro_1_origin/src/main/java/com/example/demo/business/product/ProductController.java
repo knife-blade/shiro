@@ -17,27 +17,27 @@ public class ProductController {
     @ApiOperation(value="增加产品")
     @PostMapping("add")
     public Result add() {
-        return new Result<>().message("product:add");
+        return new Result<>().message("product:add success");
     }
 
     @RequiresPermissions("product:delete")
     @ApiOperation(value="删除产品")
     @PostMapping("delete")
     public Result delete() {
-        return new Result<>().message("product:delete");
+        return new Result<>().message("product:delete success");
     }
 
     @RequiresPermissions("product:edit")
     @ApiOperation(value="编辑产品")
     @PostMapping("edit")
     public Result edit() {
-        return new Result<>().message("product:edit");
+        return new Result<>().message("product:edit success");
     }
 
     @RequiresPermissions("product:view")
     @ApiOperation(value="查看产品")
     @GetMapping("view")
     public Result view() {
-        return new Result<>().message("product:view");
+        return new Result<>().message("product:view success");
     }
 }

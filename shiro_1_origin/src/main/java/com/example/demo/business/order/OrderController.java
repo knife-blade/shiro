@@ -19,29 +19,29 @@ public class OrderController {
     @ApiOperation(value="增加订单")
     @PostMapping("add")
     public Result add() {
-        return new Result<>().message("order:add");
+        return new Result<>().message("order:add success");
     }
 
-    // 管理员或者订单管理员有权限
-    @RequiresRoles(value = {"admin,orderManager"}, logical = Logical.OR)
+    @RequiresPermissions("order:delete")
     @ApiOperation(value="删除订单")
     @PostMapping("delete")
     public Result delete() {
-        return new Result<>().message("order:add");
+        return new Result<>().message("order:delete success");
     }
 
-    @RequiresPermissions("order:edit")
+    // 管理员或者订单管理员有权限
     @RequiresRoles(value = {"admin,productManager"}, logical = Logical.OR)
     @ApiOperation(value="编辑订单")
     @PostMapping("edit")
     public Result edit() {
-        return new Result<>().message("order:add");
+        return new Result<>().message("order:edit success");
     }
 
     @RequiresPermissions("order:view")
+    @RequiresRoles(value = {"admin,productManager"}, logical = Logical.OR)
     @ApiOperation(value="查看订单")
     @GetMapping("view")
     public Result view() {
-        return new Result<>().message("order:add");
+        return new Result<>().message("order:view success");
     }
 }
