@@ -21,3 +21,9 @@ shiro:
     sessionIdCookieEnabled: true          # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
     sessionIdUrlRewritingEnabled: false   # 是否将JSESSIONID放到url中，默认为 true。
 
+# 自定义的配置
+custom:
+  jwt:
+    secret: 7h4alejfloriaj5&asf!a4m   # 密钥
+    expire: 18000    # token有效时间，5小时。单位：秒
+

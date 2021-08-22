@@ -27,7 +27,9 @@ public class LoginController {
     public LoginVO login(@RequestBody LoginRequest loginRequest) {
         String userName = loginRequest.getUserName();
         String password = loginRequest.getPassword();
-        UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
+
+        User userFromDB = userService.lambdaQuery().eq(User::getUserName, user.getUserName()).one();
+
 
         Subject subject = SecurityUtils.getSubject();
         try {
