@@ -1,53 +1,66 @@
 package com.example.demo.config.shiro;
 
-import com.example.demo.common.constant.WhiteList;
+import com.example.demo.config.shiro.filter.JwtFilter;
 import com.example.demo.config.shiro.realm.DatabaseRealm;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
-import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Configuration
 public class ShiroConfig {
+    @Bean("shiroFilterFactoryBean")
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        // 认证失败要跳转的地址。
+        // shiroFilterFactoryBean.setLoginUrl("/login");
+        // // 登录成功后要跳转的链接
+        // shiroFilterFactoryBean.setSuccessUrl("/index");
+        // // 未授权界面;
+        // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
+
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/login", "anon");
+        // 下边这行不要打开。原因待确定
+        // filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/**", "jwtAuthc,roles,perms");
+
+        Map<String, Filter> customisedFilters = new LinkedHashMap<>();
+        // 不能用注入来设置过滤器。若用注入，则本过滤器优先级会最高（/**优先级最高，导致前边所有请求都无效）。
+        // springboot会扫描所有实现了javax.servlet.Filter接口的类，无需加@Component也会扫描到。
+        customisedFilters.put("jwtAuthc", new JwtFilter());
+
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        shiroFilterFactoryBean.setFilters(customisedFilters);
+
+        return shiroFilterFactoryBean;
+    }
+
     @Bean
-    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+    public DefaultWebSecurityManager securityManager() {
+        DefaultSubjectDAO subjectDAO = new DefaultSubjectDAO();
+        DefaultSessionStorageEvaluator defaultSessionStorageEvaluator = new DefaultSessionStorageEvaluator();
+        // 关闭shiro自带的session。这样不能通过session登录shiro，后面将采用jwt凭证登录。
+        // 见：http://shiro.apache.org/session-management.html#SessionManagement-DisablingSubjectStateSessionStorage
+        defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
+        subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
 
-        chainDefinition.addPathDefinition("/login", "anon");
-
-        WhiteList.ALL.forEach(str -> {
-            chainDefinition.addPathDefinition(str, "anon");
-        });
-
-        // all other paths require a logged in user
-        chainDefinition.addPathDefinition("/**", "authc");
-        return chainDefinition;
-    }
-
-    // 名字必须是securityManager
-    @Bean(name = "securityManager")
-    public SessionsSecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        //设置realm.
         securityManager.setRealm(getDatabaseRealm());
-        securityManager.setSessionManager(sessionManager());
-        // securityManager.setCacheManager();  //支持缓存
-        return securityManager;
-    }
+        securityManager.setSubjectDAO(subjectDAO);
 
-    // 名字必须是sessionManager
-    @Bean(name = "sessionManager")
-    public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        // 设置session过期时间（5分钟）。单位：ms，默认为30分钟。
-        sessionManager.setGlobalSessionTimeout(300000L);
-        return sessionManager;
+        return securityManager;
     }
 
     @Bean
@@ -58,18 +71,15 @@ public class ShiroConfig {
     }
 
     /**
-     * 凭证匹配器
-     * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
-     *   所以我们需要修改下doGetAuthenticationInfo中的代码）
-     *
-     * @return
+     * 凭证匹配器。密码校验交给Shiro的SimpleAuthenticationInfo进行处理。
+     *  对应：DatabaseRealm#doGetAuthenticationInfo(AuthenticationToken)
      */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
 
         hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
+        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5("xxx"));
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
 
         return hashedCredentialsMatcher;
@@ -78,9 +88,6 @@ public class ShiroConfig {
     /**
      * 支持shiro 注解。
      * 也可以在pom.xml里引入此依赖：org.springframework.boot:spring-boot-starter-aop
-     *
-     * @param securityManager
-     * @return
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(

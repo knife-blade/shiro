@@ -5,6 +5,7 @@ import com.example.demo.business.rbac.role.service.RoleService;
 import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
 import com.example.demo.common.exception.BusinessException;
+import com.example.demo.common.utils.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -40,9 +41,12 @@ public class DatabaseRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
-        // 获取账号密码
-        UsernamePasswordToken t = (UsernamePasswordToken) token;
-        String userName = token.getPrincipal().toString();
+        JwtToken jwtToken = (JwtToken) token;
+
+        String userId = JwtUtil.getUserIdByToken((String) jwtToken.getPrincipal());
+        if (userId == null) {
+            throw new UnknownAccountException("token为空，请重新登录");
+        }
         // 获取数据库中的密码
         User user = userService.lambdaQuery().eq(User::getUserName, userName).one();
         if (user == null) {

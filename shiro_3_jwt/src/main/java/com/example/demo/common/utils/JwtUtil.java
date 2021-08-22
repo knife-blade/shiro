@@ -7,16 +7,18 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.demo.config.properties.JwtProperties;
-import lombok.Setter;
 
 import java.util.Date;
 
 public class JwtUtil {
-    @Setter
     private static JwtProperties jwtProperties;
 
     // 创建jwt token
     public static String createToken(String userId) {
+        if (jwtProperties == null) {
+            jwtProperties = ApplicationContextHolder.getContext()
+                    .getBean(JwtProperties.class);
+        }
         try {
             Date date = new Date(System.currentTimeMillis() + jwtProperties.getExpire() * 1000);
             Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret());
@@ -33,6 +35,10 @@ public class JwtUtil {
 
     // 校验token
     public static boolean verifyToken(String token) {
+        if (jwtProperties == null) {
+            jwtProperties = ApplicationContextHolder.getContext()
+                    .getBean(JwtProperties.class);
+        }
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret());
             JWTVerifier verifier = JWT.require(algorithm)
@@ -47,7 +53,7 @@ public class JwtUtil {
         }
     }
 
-    public String getUserIdByToken(String token) {
+    public static String getUserIdByToken(String token) {
         try {
             String userId = JWT.decode(token).getAudience().get(0);
             return userId;

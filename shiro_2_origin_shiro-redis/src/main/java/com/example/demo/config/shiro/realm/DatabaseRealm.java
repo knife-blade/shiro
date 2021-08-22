@@ -52,7 +52,7 @@ public class DatabaseRealm extends AuthorizingRealm {
     }
 
     // 权限验证
-    // 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。本项目里，实际不会走到这里。
+    // 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入到这里，表示账号已经通过认证了

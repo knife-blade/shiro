@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class JwtConfig {
-    @Bean(initMethod = "setForJwtUtil")
+    @Bean
     @ConfigurationProperties(prefix = "custom.jwt")
     public JwtProperties jwtProperties() {
         return new JwtProperties();

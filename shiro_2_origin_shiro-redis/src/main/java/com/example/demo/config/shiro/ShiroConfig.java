@@ -2,6 +2,7 @@ package com.example.demo.config.shiro;
 
 import com.example.demo.common.constant.WhiteList;
 import com.example.demo.config.shiro.realm.DatabaseRealm;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.mgt.SessionsSecurityManager;
@@ -71,11 +72,8 @@ public class ShiroConfig {
     }
 
     /**
-     * 凭证匹配器
-     * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
-     *   所以我们需要修改下doGetAuthenticationInfo中的代码）
-     *
-     * @return
+     * 凭证匹配器。密码校验交给Shiro的SimpleAuthenticationInfo进行处理。
+     *  对应：DatabaseRealm#doGetAuthenticationInfo(AuthenticationToken)
      */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
@@ -91,9 +89,6 @@ public class ShiroConfig {
     /**
      * 支持shiro 注解。
      * 也可以在pom.xml里引入此依赖：org.springframework.boot:spring-boot-starter-aop
-     *
-     * @param securityManager
-     * @return
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(

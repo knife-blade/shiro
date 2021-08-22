@@ -8,12 +8,16 @@ import javax.servlet.ServletResponse;
 
 public class JwtFilter extends AuthenticatingFilter {
     @Override
-    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+    protected AuthenticationToken createToken(ServletRequest servletRequest,
+                                              ServletResponse servletResponse) throws Exception {
+
+
         return null;
     }
 
     @Override
-    protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+    protected boolean onAccessDenied(ServletRequest servletRequest,
+                                     ServletResponse servletResponse) throws Exception {
         return false;
     }
 }
