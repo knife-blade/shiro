@@ -5,7 +5,6 @@ import com.example.demo.business.login.entity.LoginVO;
 import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
 import com.example.demo.common.exception.BusinessException;
-import com.example.demo.common.utils.ApplicationContextHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
