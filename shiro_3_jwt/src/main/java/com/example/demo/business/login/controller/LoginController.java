@@ -4,16 +4,13 @@ import com.example.demo.business.login.entity.LoginRequest;
 import com.example.demo.business.login.entity.LoginVO;
 import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
-import com.example.demo.common.constant.Frontend;
+import com.example.demo.common.constant.AuthConstant;
 import com.example.demo.common.exception.BusinessException;
 import com.example.demo.common.utils.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,13 +35,16 @@ public class LoginController {
             throw new BusinessException("用户不存在");
         }
 
-        if (!user.getPassword().equals(new Md5Hash(new Md5Hash(password)).toString())) {
+        String calculatedPassword = new SimpleHash(AuthConstant.ALGORITHM_TYPE,
+                password, user.getSalt(), AuthConstant.HASH_ITERATIONS).toString();
+
+        if (!user.getPassword().equals(calculatedPassword)) {
             throw new BusinessException("用户名或密码不正确");
         }
 
         String token = JwtUtil.createToken(user.getId().toString());
 
-        response.setHeader(Frontend.TOKEN_HEADER, token);
+        response.setHeader(AuthConstant.TOKEN_HEADER, token);
 
         return fillResult(user);
     }

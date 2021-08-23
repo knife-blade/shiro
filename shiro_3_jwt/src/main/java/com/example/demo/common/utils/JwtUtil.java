@@ -48,7 +48,7 @@ public class JwtUtil {
             DecodedJWT jwt = verifier.verify(token);
             return true;
         } catch (JWTVerificationException exception) {
-            // throw new RuntimeException("token 无效，请重新获取");
+            // token错误、token超期等，都会走到这里
             return false;
         }
     }

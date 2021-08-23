@@ -38,6 +38,7 @@ public class DatabaseRealm extends AuthorizingRealm {
     }
 
     // 登录认证
+    // 此处的 SimpleAuthenticationInfo 可返回任意值，密码校验时不会用到它
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
@@ -48,26 +49,27 @@ public class DatabaseRealm extends AuthorizingRealm {
             throw new UnknownAccountException("token为空，请重新登录");
         }
         // 获取数据库中的密码
-        User user = userService.lambdaQuery().eq(User::getUserName, userName).one();
+        User user = userService.getById(userId);
         if (user == null) {
-            throw new BusinessException("用户不存在");
+            throw new UnknownAccountException("token为空，请重新登录");
         }
+
         String passwordInDB = user.getPassword();
         String salt = user.getSalt();
-        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法,通常返回当前类名 :databaseRealm
-        // 盐也放进去
-        // 这样通过ShiroConfig里配置的 HashedCredentialsMatcher 进行自动校验
+        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法，通常返回当前类名 :databaseRealm
+        // 盐也放进去，通过ShiroConfig里配置的 HashedCredentialsMatcher 进行自动校验
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                userName, passwordInDB, ByteSource.Util.bytes(salt), getName());
+                jwtToken.getPrincipal(), jwtToken.getCredentials(), ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;
     }
 
     // 权限验证
-    // 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。本项目里，实际不会走到这里。
+    // 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入到这里，表示账号已经通过认证了
         String userName = (String) principalCollection.getPrimaryPrincipal();
+
         // 通过service获取角色和权限
         Set<String> permissions = permissionService.getPermissionsByUserName(userName);
         Set<String> roles = roleService.getRolesByUserName(userName);
