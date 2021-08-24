@@ -14,16 +14,16 @@ shiro:
   enabled: true       # 开启 shiro，默认为 true
   web:
     enabled: true     # 开启 shiro Web，默认为 true
-  loginUrl: /login    # 登录地址，默认为"login.jsp"
-  successUrl: /index  # 登录成功后跳转的地址，默认为"/"
-  unauthorizedUrl: /unauthorized          # 未获授权默认跳转地址
-  sessionManager:
-    sessionIdCookieEnabled: true          # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
-    sessionIdUrlRewritingEnabled: false   # 是否将JSESSIONID放到url中，默认为 true。
+#  loginUrl: /login    # 登录地址，默认为"login.jsp"
+#  successUrl: /index  # 登录成功后跳转的地址，默认为"/"
+#  unauthorizedUrl: /unauthorized          # 未获授权默认跳转地址
+#  sessionManager:
+#    sessionIdCookieEnabled: true          # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
+#    sessionIdUrlRewritingEnabled: false   # 是否将JSESSIONID放到url中，默认为 true。
 
 # 自定义的配置
 custom:
   jwt:
-    secret: 7h4alejfloriaj5&asf!a4m   # 密钥
+    secret: 7h4alejfloriaj5&asf!a4m   # 密钥。随便写
     expire: 1800    # token有效时间，30分钟。单位：秒
 

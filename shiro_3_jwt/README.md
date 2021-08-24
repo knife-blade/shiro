@@ -20,3 +20,13 @@
 |  li4       | abcde        |productManager    | 产品的所有权限 |
 
 ### 代码执行流程
+#### login
+JwtFilter#onAccessDenied  //正常返回true  
+&emsp; PathMatchingFilter         //去anon过滤器查找，在里边，则放行  
+&emsp;&emsp; 自己的login接口
+#### 需权限的接口
+JwtFilter#onAccessDenied  //执行executeLogin(servletRequest, servletResponse);  
+&emsp; JwtFilter#createToken  
+&emsp;&emsp; AccountRealm＃doGetAuthenticationInfo  
+&emsp;&emsp;&emsp; AccountRealm＃doGetAuthorizationInfo  
+&emsp;&emsp;&emsp;&emsp;&emsp;自己的接口
