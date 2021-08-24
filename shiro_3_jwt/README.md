@@ -29,4 +29,4 @@ JwtFilter#onAccessDenied  //执行executeLogin(servletRequest, servletResponse);
 &emsp; JwtFilter#createToken  
 &emsp;&emsp; AccountRealm＃doGetAuthenticationInfo  
 &emsp;&emsp;&emsp; AccountRealm＃doGetAuthorizationInfo  
-&emsp;&emsp;&emsp;&emsp;&emsp;自己的接口
+&emsp;&emsp;&emsp;&emsp; 自己的接口
