@@ -13,19 +13,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 public class JwtFilter extends AuthenticatingFilter {
-    //这里的token会传给AuthorizingRealm子类（本处是DatabaseRealm）的doGetAuthenticationInfo方法作为参数
-    @Override
-    protected AuthenticationToken createToken(ServletRequest servletRequest,
-                                              ServletResponse servletResponse) {
-
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String token = request.getHeader(AuthConstant.TOKEN_HEADER);
-        if (!StringUtils.hasText(token)) {
-            return null;
-        }
-        return new JwtToken(token);
-    }
-
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest,
                                      ServletResponse servletResponse) throws Exception {
@@ -43,4 +30,19 @@ public class JwtFilter extends AuthenticatingFilter {
 
         return executeLogin(servletRequest, servletResponse);
     }
+
+    //这里的token会传给AuthorizingRealm子类（本处是DatabaseRealm）的doGetAuthenticationInfo方法作为参数
+    @Override
+    protected AuthenticationToken createToken(ServletRequest servletRequest,
+                                              ServletResponse servletResponse) {
+
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String token = request.getHeader(AuthConstant.TOKEN_HEADER);
+        if (!StringUtils.hasText(token)) {
+            return null;
+        }
+        return new JwtToken(token);
+    }
+
+
 }

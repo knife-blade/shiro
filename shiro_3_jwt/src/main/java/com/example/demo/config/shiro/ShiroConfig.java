@@ -93,26 +93,7 @@ public class ShiroConfig {
 
     @Bean
     public DatabaseRealm getDatabaseRealm() {
-        DatabaseRealm myShiroRealm = new DatabaseRealm();
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
-        return myShiroRealm;
-    }
-
-    /**
-     * 凭证匹配器。密码校验交给Shiro的SimpleAuthenticationInfo进行处理。
-     *  对应：DatabaseRealm#doGetAuthenticationInfo(AuthenticationToken)
-     */
-    @Bean
-    public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-
-        //散列算法；本处使用md5
-        hashedCredentialsMatcher.setHashAlgorithmName(AuthConstant.ALGORITHM_TYPE);
-        //散列的次数，比如散列两次，相当于 md5(md5("xxx"));
-        hashedCredentialsMatcher.setHashIterations(AuthConstant.HASH_ITERATIONS);
-        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
-
-        return hashedCredentialsMatcher;
+        return new DatabaseRealm();
     }
 
     /**
