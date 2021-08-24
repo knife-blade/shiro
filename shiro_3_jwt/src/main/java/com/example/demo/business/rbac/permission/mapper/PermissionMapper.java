@@ -19,10 +19,10 @@ public interface PermissionMapper extends BaseMapper<Permission> {
             "    t_role_permission_mid, " +
             "    t_permission " +
             "WHERE " +
-            "    t_user.`user_name` = #{userName}  " +
+            "    t_user.`id` = #{userId}  " +
             "    AND t_user.id = t_user_role_mid.user_id  " +
             "    AND t_user_role_mid.role_id = t_role.id " +
             "    AND t_role.id = t_role_permission_mid.role_id " +
             "    AND t_role_permission_mid.permission_id = t_permission.id")
-    Set<String> getPermissionsByUserName(@Param("userName") String userName);
+    Set<String> getPermissionsByUserId(@Param("userId") Long userId);
 }

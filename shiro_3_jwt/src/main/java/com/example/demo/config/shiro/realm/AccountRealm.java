@@ -4,9 +4,9 @@ import com.example.demo.business.rbac.permission.service.PermissionService;
 import com.example.demo.business.rbac.role.service.RoleService;
 import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
-import com.example.demo.common.exception.BusinessException;
 import com.example.demo.common.utils.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
+import com.example.demo.config.shiro.entity.AccountProfile;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Lazy;
 
 import java.util.Set;
 
-public class DatabaseRealm extends AuthorizingRealm {
+public class AccountRealm extends AuthorizingRealm {
     @Lazy
     @Autowired
     private UserService userService;
@@ -38,7 +38,7 @@ public class DatabaseRealm extends AuthorizingRealm {
     }
 
     // 登录认证
-    // 此处的 SimpleAuthenticationInfo 可返回任意值，密码校验时不会用到它
+    // 此处的 SimpleAuthenticationInfo 可返回任意值，密码校验时不会用到它。
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
@@ -54,12 +54,15 @@ public class DatabaseRealm extends AuthorizingRealm {
             throw new UnknownAccountException("token为空，请重新登录");
         }
 
-        String passwordInDB = user.getPassword();
+        AccountProfile accountProfile = new AccountProfile();
+        accountProfile.setId(userId);
+        accountProfile.setUserName(user.getUserName());
+
         String salt = user.getSalt();
-        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法，通常返回当前类名 :databaseRealm
+        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法，通常返回当前类名 :accountRealm
         // 盐也放进去，通过ShiroConfig里配置的 HashedCredentialsMatcher 进行自动校验
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                jwtToken.getPrincipal(), jwtToken.getCredentials(), ByteSource.Util.bytes(salt), getName());
+                accountProfile, jwtToken.getCredentials(), ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;
     }
 
@@ -68,11 +71,11 @@ public class DatabaseRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入到这里，表示账号已经通过认证了
-        String userName = (String) principalCollection.getPrimaryPrincipal();
+        AccountProfile profile = (AccountProfile) principalCollection.getPrimaryPrincipal();
 
         // 通过service获取角色和权限
-        Set<String> permissions = permissionService.getPermissionsByUserName(userName);
-        Set<String> roles = roleService.getRolesByUserName(userName);
+        Set<String> permissions = permissionService.getPermissionsByUserId(profile.getId());
+        Set<String> roles = roleService.getRolesByUserId(profile.getId());
 
         // 授权对象
         SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();

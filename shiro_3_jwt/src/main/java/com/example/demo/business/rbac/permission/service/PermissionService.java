@@ -6,5 +6,5 @@ import com.example.demo.business.rbac.permission.entity.Permission;
 import java.util.Set;
 
 public interface PermissionService extends IService<Permission> {
-    Set<String> getPermissionsByUserName(String userName);
+    Set<String> getPermissionsByUserId(String userName);
 }

@@ -12,7 +12,8 @@ import java.util.Set;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Override
-    public Set<String> getRolesByUserName(String userName) {
-        return this.getBaseMapper().getRolesByUserName(userName);
+    public Set<String> getRolesByUserId(String userId) {
+        Long id = Long.parseLong(userId);
+        return this.getBaseMapper().getRolesByUserId(id);
     }
 }

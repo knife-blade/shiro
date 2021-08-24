@@ -1,26 +1,18 @@
 package com.example.demo.config.shiro;
 
-import com.example.demo.common.constant.AuthConstant;
 import com.example.demo.common.constant.WhiteList;
 import com.example.demo.config.shiro.filter.JwtFilter;
-import com.example.demo.config.shiro.realm.DatabaseRealm;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import com.example.demo.config.shiro.realm.AccountRealm;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.servlet.Filter;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -70,6 +62,7 @@ public class ShiroConfig {
         return chainDefinition;
     }
 
+    // 名字必须是authc，用以替代shiro默认的authc。
     @Bean("authc")
     public AuthenticatingFilter authenticatingFilter() {
         return new JwtFilter();
@@ -92,8 +85,8 @@ public class ShiroConfig {
     }
 
     @Bean
-    public DatabaseRealm getDatabaseRealm() {
-        return new DatabaseRealm();
+    public AccountRealm getDatabaseRealm() {
+        return new AccountRealm();
     }
 
     /**
