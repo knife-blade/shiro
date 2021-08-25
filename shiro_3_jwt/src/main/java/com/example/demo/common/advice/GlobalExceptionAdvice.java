@@ -3,9 +3,12 @@ package com.example.demo.common.advice;
 import com.example.demo.common.entity.Result;
 import com.example.demo.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,6 +29,18 @@ public class GlobalExceptionAdvice {
         // 实际项目中应该这样写，防止用户看到详细的异常信息
         // return new Result().failure().message.message("操作失败");
         return new Result<>().failure().message(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthenticatedException.class)
+    public Result<Object> handleUnauthenticatedException() {
+        return new Result<>().failure();
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UnauthorizedException.class)
+    public Result<Object> handleUnauthorizedException() {
+        return new Result<>().failure();
     }
 
     @ExceptionHandler(BusinessException.class)
