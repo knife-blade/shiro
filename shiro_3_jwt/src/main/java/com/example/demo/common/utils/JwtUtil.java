@@ -21,7 +21,7 @@ public class JwtUtil {
         }
         try {
             Date date = new Date(System.currentTimeMillis() + jwtProperties.getExpire() * 1000);
-            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret());
+            Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
             return JWT.create()
                     // 自定义私有的payload的key-value。比如：.withClaim("userName", "Tony")
                     // .withClaim("key1", "value1")
@@ -40,7 +40,7 @@ public class JwtUtil {
                     .getBean(JwtProperties.class);
         }
         try {
-            Algorithm algorithm = Algorithm.HMAC256(jwtProperties.getSecret());
+            Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
             JWTVerifier verifier = JWT.require(algorithm)
                     // .withIssuer("auth0")
                     // .withClaim("username", username)

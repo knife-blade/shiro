@@ -1,10 +1,8 @@
 ### 项目描述
-- 本项目测试最基本的Shiro控制。
-- 使用Shiro默认的session来管理权限。
+- 本项目使用jwt替代默认的authc作为认证方式，其他不变。
 - 使用角色和资源权限两种方式。（注解的方式）
-- 使用Shiro默认的过滤器。
 - 使用Knife4j测试接口（Swagger的升级版）。
-- 不使用缓存
+- 不使用缓存。
 - 使用shiro-spring-boot-web-starter:1.7.0
 
 ### 角色的权限

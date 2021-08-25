@@ -11,6 +11,7 @@ import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -74,15 +75,27 @@ public class ShiroConfig {
     }
 
     /**
-     * 支持shiro 注解。
-     * 也可以在pom.xml里引入此依赖：org.springframework.boot:spring-boot-starter-aop
+     * setUsePrefix(true)用于解决一个奇怪的bug。如下：
+     *  在引入spring aop的情况下，在@Controller注解的类的方法中加入@RequiresRole等
+     *  shiro注解，会导致该方法无法映射请求，导致返回404。加入这项配置能解决这个bug。
      */
     @Bean
+    public static DefaultAdvisorAutoProxyCreator getDefaultAdvisorAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator=new DefaultAdvisorAutoProxyCreator();
+        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
+        return defaultAdvisorAutoProxyCreator;
+    }
+
+    /**
+     * 开启shiro 注解。比如：@RequiresRole
+     * 本处不用此方法开启注解，使用引入spring aop依赖的方式。原因见：application.yml里的注释
+     */
+    /*@Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
             SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor =
                 new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
-    }
+    }*/
 }

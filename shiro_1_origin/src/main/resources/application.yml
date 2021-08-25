@@ -20,3 +20,12 @@ shiro:
   sessionManager:
     sessionIdCookieEnabled: true          # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
     sessionIdUrlRewritingEnabled: false   # 是否将JSESSIONID放到url中，默认为 true。
+  #  annotations:
+  #    enabled: true    # 开启shiro的注解。比如：@RequiresRole。
+  # 开启shiro注解一共有三种方式。
+  #    1.引入spring aop依赖：org.springframework.boot:spring-boot-starter-aop
+  #    2.在application.yml里边设置：shiro.annotations.enabled=true。
+  #         对应：ShiroAnnotationProcessorAutoConfiguration.class
+  #    3.提供一个AuthorizationAttributeSourceAdvisor这个bean
+  #  强烈建议使用第1种，因为shiro自带的aop与spring aop只能用一个，如果用了shiro的aop，那么很多
+  #  spring的注解就失效了。比如：@Async，@Cacheable

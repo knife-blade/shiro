@@ -1,10 +1,12 @@
 ### 项目描述
 - 本项目测试最基本的Shiro控制。
 - 使用Shiro默认的session来管理权限。
+- 使用Shiro默认的缓存来放session。
+- 用本地Map存session，重启即失效。
+- 本地Map意味着只能单机，无法多个服务共享session。
 - 使用角色和资源权限两种方式。（注解的方式）
 - 使用Shiro默认的过滤器。
-- 使用Knife4j测试接口（Swagger的升级版）。
-- 不使用缓存
+- 使用Knife4j测试（Swagger的升级版）。
 - 使用shiro-spring-boot-web-starter:1.7.0
 
 ### 角色的权限
