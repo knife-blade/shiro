@@ -37,8 +37,9 @@ public class OrderController {
         return new Result<>().message("order:edit success");
     }
 
+    // 此时必须同时满足这两个注解的条件才允许访问
     @RequiresPermissions("order:view")
-    @RequiresRoles(value = {"admin,productManager"}, logical = Logical.OR)
+    @RequiresRoles(value = {"admin", "productManager"}, logical = Logical.OR)
     @ApiOperation(value="查看订单")
     @GetMapping("view")
     public Result view() {

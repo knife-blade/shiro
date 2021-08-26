@@ -35,14 +35,14 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(UnauthenticatedException.class)
     public Result<Object> handleUnauthenticatedException(Exception e) {
         log.error(e.getMessage(), e);
-        return new Result<>().failure();
+        return new Result<>().failure().message(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UnauthorizedException.class)
     public Result<Object> handleUnauthorizedException(Exception e) {
         log.error(e.getMessage(), e);
-        return new Result<>().failure();
+        return new Result<>().failure().message(e.getMessage());
     }
 
     @ExceptionHandler(BusinessException.class)
