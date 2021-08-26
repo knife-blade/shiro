@@ -7,6 +7,7 @@ import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
@@ -15,39 +16,10 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.LinkedHashMap;
+
 @Configuration
 public class ShiroConfig {
-    // @Bean("shiroFilterFactoryBean")
-    // public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-    //     ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-    //     shiroFilterFactoryBean.setSecurityManager(securityManager);
-    //     // 认证失败要跳转的地址。
-    //     // shiroFilterFactoryBean.setLoginUrl("/login");
-    //     // // 登录成功后要跳转的链接
-    //     // shiroFilterFactoryBean.setSuccessUrl("/index");
-    //     // // 未授权界面;
-    //     // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
-    //
-    //     Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-    //     filterChainDefinitionMap.put("/login", "anon");
-    //
-    //     WhiteList.ALL.forEach(str -> {
-    //         filterChainDefinitionMap.put(str, "anon");
-    //     });
-    //
-    //     // filterChainDefinitionMap.put("/logout", "logout");
-    //     filterChainDefinitionMap.put("/**", "jwtAuthc");
-    //
-    //     Map<String, Filter> customisedFilters = new LinkedHashMap<>();
-    //     // 不能用注入来设置过滤器。若用注入，则本过滤器优先级会最高（/**优先级最高，导致前边所有请求都无效）。
-    //     // springboot会扫描所有实现了javax.servlet.Filter接口的类，无需加@Component也会扫描到。
-    //     customisedFilters.put("jwtAuthc", new JwtFilter());
-    //
-    //     shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-    //     shiroFilterFactoryBean.setFilters(customisedFilters);
-    //
-    //     return shiroFilterFactoryBean;
-    // }
     @Bean
     public ShiroFilterChainDefinition shiroFilterChainDefinition() {
         DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
@@ -113,5 +85,40 @@ public class ShiroConfig {
                 new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
+    }*/
+
+    /**
+     * 此种配置方法在本项目中跑不通。
+     */
+    /* @Bean("shiroFilterFactoryBean")
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        // 认证失败要跳转的地址。
+        // shiroFilterFactoryBean.setLoginUrl("/login");
+        // // 登录成功后要跳转的链接
+        // shiroFilterFactoryBean.setSuccessUrl("/index");
+        // // 未授权界面;
+        // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
+
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/login", "anon");
+
+        WhiteList.ALL.forEach(str -> {
+            filterChainDefinitionMap.put(str, "anon");
+        });
+
+        // filterChainDefinitionMap.put("/logout", "logout");
+        filterChainDefinitionMap.put("/**", "jwtAuthc");
+
+        Map<String, Filter> customisedFilters = new LinkedHashMap<>();
+        // 不能用注入来设置过滤器。若用注入，则本过滤器优先级会最高（/**优先级最高，导致前边所有请求都无效）。
+        // springboot会扫描所有实现了javax.servlet.Filter接口的类，无需加@Component也会扫描到。
+        customisedFilters.put("jwtAuthc", new JwtFilter());
+
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        shiroFilterFactoryBean.setFilters(customisedFilters);
+
+        return shiroFilterFactoryBean;
     }*/
 }
