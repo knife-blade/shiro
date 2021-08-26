@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,9 @@ public class LoginController {
 
         String token = JwtUtil.createToken(user.getId().toString());
 
-        response.setHeader(AuthConstant.TOKEN_HEADER, token);
+        response.setHeader(HttpHeaders.SET_COOKIE, token);
+        // 自定义Header也可以，但浏览器不会存自定义的Header，需要前端自己去存
+        // response.setHeader("Authentication", token);
 
         return fillResult(user);
     }

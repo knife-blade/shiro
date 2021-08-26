@@ -1,10 +1,10 @@
 package com.example.demo.config.shiro.filter;
 
-import com.example.demo.common.constant.AuthConstant;
 import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
@@ -21,7 +21,9 @@ public class JwtFilter extends AuthenticatingFilter {
     protected boolean onAccessDenied(ServletRequest servletRequest,
                                      ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String token = request.getHeader(AuthConstant.TOKEN_HEADER);
+        String token = request.getHeader(HttpHeaders.COOKIE);
+        // 自定义Header也可以，但浏览器不会存自定义的Header，需要前端自己去存
+        // String token = request.getHeader("Authentication");
 
         if (!StringUtils.hasText(token)) {
             return true;
@@ -45,7 +47,9 @@ public class JwtFilter extends AuthenticatingFilter {
                                               ServletResponse servletResponse) {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String token = request.getHeader(AuthConstant.TOKEN_HEADER);
+        String token = request.getHeader(HttpHeaders.COOKIE);
+        // 自定义Header也可以，但浏览器不会存自定义的Header，需要前端自己去存
+        // String token = request.getHeader("Authentication");
         if (!StringUtils.hasText(token)) {
             return null;
         }
