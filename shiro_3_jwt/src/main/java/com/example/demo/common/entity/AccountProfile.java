@@ -1,4 +1,4 @@
-package com.example.demo.config.shiro.entity;
+package com.example.demo.common.entity;
 
 import com.example.demo.common.utils.ShiroUtil;
 import lombok.Data;

@@ -6,7 +6,7 @@ import com.example.demo.business.rbac.user.entity.User;
 import com.example.demo.business.rbac.user.service.UserService;
 import com.example.demo.common.utils.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
-import com.example.demo.config.shiro.entity.AccountProfile;
+import com.example.demo.common.entity.AccountProfile;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
