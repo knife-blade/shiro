@@ -1,6 +1,6 @@
 package com.example.demo.common.entity;
 
-import com.example.demo.common.utils.ShiroUtil;
+import com.example.demo.common.util.auth.ShiroUtil;
 import lombok.Data;
 
 /**

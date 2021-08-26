@@ -2,14 +2,13 @@ package com.example.demo.business.login.controller;
 
 import com.example.demo.business.login.entity.LoginRequest;
 import com.example.demo.business.login.entity.LoginVO;
-import com.example.demo.business.rbac.user.entity.User;
-import com.example.demo.business.rbac.user.service.UserService;
+import com.example.demo.rbac.user.entity.User;
+import com.example.demo.rbac.user.service.UserService;
 import com.example.demo.common.constant.AuthConstant;
 import com.example.demo.common.exception.BusinessException;
-import com.example.demo.common.utils.JwtUtil;
+import com.example.demo.common.util.auth.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,10 +1,10 @@
 package com.example.demo.config.shiro.realm;
 
-import com.example.demo.business.rbac.permission.service.PermissionService;
-import com.example.demo.business.rbac.role.service.RoleService;
-import com.example.demo.business.rbac.user.entity.User;
-import com.example.demo.business.rbac.user.service.UserService;
-import com.example.demo.common.utils.JwtUtil;
+import com.example.demo.rbac.permission.service.PermissionService;
+import com.example.demo.rbac.role.service.RoleService;
+import com.example.demo.rbac.user.entity.User;
+import com.example.demo.rbac.user.service.UserService;
+import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import com.example.demo.common.entity.AccountProfile;
 import org.apache.shiro.authc.*;

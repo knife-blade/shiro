@@ -1,10 +1,9 @@
 package com.example.demo.config.shiro.filter;
 
 import com.example.demo.common.constant.AuthConstant;
-import com.example.demo.common.utils.JwtUtil;
+import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.springframework.util.StringUtils;
 
