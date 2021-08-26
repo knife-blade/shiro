@@ -17,7 +17,7 @@ public interface RoleMapper extends BaseMapper<Role> {
             "    t_user_role_mid, " +
             "    t_role " +
             "WHERE " +
-            "    t_user.`user_name` = #{userId}  " +
+            "    t_user.`id` = #{userId}  " +
             "    AND t_user.id = t_user_role_mid.user_id  " +
             "    AND t_user_role_mid.role_id = t_role.id")
     Set<String> getRolesByUserId(@Param("userId")Long userId);
