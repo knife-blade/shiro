@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS t_permission;
 DROP TABLE IF EXISTS t_user_role_mid;
 DROP TABLE IF EXISTS t_role_permission_mid;
 
-create table t_user (
+CREATE TABLE t_user (
   id bigint AUTO_INCREMENT,
   user_name VARCHAR(100),
   password VARCHAR(100),
@@ -16,28 +16,28 @@ create table t_user (
   PRIMARY KEY(id)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table t_role (
+CREATE TABLE t_role (
   id bigint AUTO_INCREMENT,
   name VARCHAR(100),
   description VARCHAR(100),
   PRIMARY KEY(id)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table t_permission (
+CREATE TABLE t_permission (
   id bigint AUTO_INCREMENT,
   name VARCHAR(100),
   description VARCHAR(100),
   PRIMARY KEY(id)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table t_user_role_mid (
+CREATE TABLE t_user_role_mid (
   id bigint AUTO_INCREMENT,
   user_id bigint,
   role_id bigint,
   PRIMARY KEY(id)
 ) charset=utf8 ENGINE=InnoDB;
 
-create table t_role_permission_mid (
+CREATE TABLE t_role_permission_mid (
   id bigint AUTO_INCREMENT,
   role_id bigint,
   permission_id bigint,
