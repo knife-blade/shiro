@@ -1,5 +1,6 @@
 package com.example.demo.common.advice;
 
+import com.example.demo.common.constant.WhiteList;
 import com.example.demo.common.entity.Result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,12 +24,7 @@ import java.util.List;
 @Order(Ordered.LOWEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
-    private List<String> KNIFE4J_URI = Arrays.asList(
-            "/doc.html",
-            "/swagger-resources",
-            "/swagger-resources/configuration",
-            "/v3/api-docs",
-            "/v2/api-docs");
+
     @Override
     public boolean supports(MethodParameter returnType,
                             Class<? extends HttpMessageConverter<?>> converterType) {
@@ -63,7 +59,7 @@ public class GlobalResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     private boolean isKnife4jUrl(String uri) {
         AntPathMatcher pathMatcher = new AntPathMatcher();
-        for (String s : KNIFE4J_URI) {
+        for (String s : WhiteList.KNIFE4J) {
             if (pathMatcher.match(s, uri)) {
                 return true;
             }
