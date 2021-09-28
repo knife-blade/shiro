@@ -43,6 +43,8 @@ public class ShiroConfig {
         });
 
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/logout", "jwtAuthc");
+
         // 下边这行不要打开。原因待确定
         // filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/**", "jwtAuthc,urlAuthz");
@@ -57,20 +59,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(customisedFilters);
 
         return shiroFilterFactoryBean;
-    }
-    @Bean
-    public ShiroFilterChainDefinition shiroFilterChainDefinition() {
-        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
-
-        chainDefinition.addPathDefinition("/login", "anon");
-
-        WhiteList.ALL.forEach(str -> {
-            chainDefinition.addPathDefinition(str, "anon");
-        });
-
-        // all other paths require a logged in user
-        chainDefinition.addPathDefinition("/**", "authc");
-        return chainDefinition;
     }
 
     @Bean
@@ -117,40 +105,5 @@ public class ShiroConfig {
                 new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
-    }*/
-
-    /**
-     * 此种配置方法在本项目中跑不通。
-     */
-    /* @Bean("shiroFilterFactoryBean")
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 认证失败要跳转的地址。
-        // shiroFilterFactoryBean.setLoginUrl("/login");
-        // // 登录成功后要跳转的链接
-        // shiroFilterFactoryBean.setSuccessUrl("/index");
-        // // 未授权界面;
-        // shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
-
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/login", "anon");
-
-        WhiteList.ALL.forEach(str -> {
-            filterChainDefinitionMap.put(str, "anon");
-        });
-
-        // filterChainDefinitionMap.put("/logout", "logout");
-        filterChainDefinitionMap.put("/**", "jwtAuthc");
-
-        Map<String, Filter> customisedFilters = new LinkedHashMap<>();
-        // 不能用注入来设置过滤器。若用注入，则本过滤器优先级会最高（/**优先级最高，导致前边所有请求都无效）。
-        // springboot会扫描所有实现了javax.servlet.Filter接口的类，无需加@Component也会扫描到。
-        customisedFilters.put("jwtAuthc", new JwtFilter());
-
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        shiroFilterFactoryBean.setFilters(customisedFilters);
-
-        return shiroFilterFactoryBean;
     }*/
 }
