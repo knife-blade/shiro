@@ -66,8 +66,12 @@ public class AccountRealm extends AuthorizingRealm {
         return authenticationInfo;
     }
 
-    // 权限验证
-    // 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。
+    /**
+     * 权限验证
+     * - 只有用到org.apache.shiro.web.filter.authz包里默认的过滤器才会走到这里。
+     * - 我自定义的PathMatchingFilter{@link com.example.demo.config.shiro.filter.UrlFilter}，
+     *   所以不会执行到到本处代码。
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入到这里，表示账号已经通过认证了

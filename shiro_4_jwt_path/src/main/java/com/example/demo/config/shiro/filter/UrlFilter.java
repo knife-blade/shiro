@@ -7,16 +7,12 @@ import com.example.demo.rbac.permission.service.PermissionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.PathMatchingFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -48,7 +44,7 @@ public class UrlFilter extends PathMatchingFilter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         //让浏览器用utf8来解析返回的数据
-        httpResponse.setHeader("Content-type", "text/html;charset=UTF-8");
+        httpResponse.setHeader("Content-type", "application/json;charset=UTF-8");
         //告诉servlet用UTF-8转码，而不是用默认的ISO8859
         httpResponse.setCharacterEncoding("UTF-8");
 
