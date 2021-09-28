@@ -12,8 +12,7 @@ import java.util.Set;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Override
-    public Set<String> getPermissionsByUserId(String userId) {
-        Long id = Long.parseLong(userId);
-        return this.getBaseMapper().getPermissionsByUserId(id);
+    public Set<String> getPermissionsByUserId(Long userId) {
+        return this.getBaseMapper().getPermissionsByUserId(userId);
     }
 }

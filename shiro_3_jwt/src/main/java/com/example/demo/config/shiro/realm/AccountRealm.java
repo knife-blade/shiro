@@ -74,7 +74,7 @@ public class AccountRealm extends AuthorizingRealm {
         AccountProfile profile = (AccountProfile) principalCollection.getPrimaryPrincipal();
 
         // 通过service获取角色和权限
-        Set<String> permissions = permissionService.getPermissionsByUserId(profile.getId());
+        Set<String> permissions = permissionService.getPermissionsByUserId(Long.parseLong(profile.getId()));
         Set<String> roles = roleService.getRolesByUserId(profile.getId());
 
         // 授权对象
