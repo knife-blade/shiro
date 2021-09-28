@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.example.demo.common.util.ApplicationContextHolder;
@@ -14,11 +13,9 @@ import java.util.Date;
 
 public class JwtUtil {
     private static final JwtProperties jwtProperties;
-    private static final JWTVerifier jwtVerifier;
 
     static {
         jwtProperties = ApplicationContextHolder.getContext().getBean(JwtProperties.class);
-        jwtVerifier = createVerifier();
     }
 
     // 创建jwt token
@@ -47,6 +44,13 @@ public class JwtUtil {
      * - token超期：{@link com.auth0.jwt.exceptions.TokenExpiredException}
      */
     public static boolean verifyToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
+
+        JWTVerifier jwtVerifier = JWT.require(algorithm)
+                // .withIssuer("auth0")
+                // .withClaim("userName", userName)
+                .build();
+
         try {
             DecodedJWT jwt = jwtVerifier.verify(token);
         } catch (JWTVerificationException e) {
@@ -65,20 +69,8 @@ public class JwtUtil {
     }
 
     public static boolean isTokenExpired(String token) {
-        try {
-            jwtVerifier.verify(token);
-        } catch (TokenExpiredException e) {
-            return true;
-        }
-        return false;
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getExpiresAt().before(new Date());
     }
 
-    private static JWTVerifier createVerifier() {
-        Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
-
-        return JWT.require(algorithm)
-                // .withIssuer("auth0")
-                // .withClaim("userName", userName)
-                .build();
-    }
 }
