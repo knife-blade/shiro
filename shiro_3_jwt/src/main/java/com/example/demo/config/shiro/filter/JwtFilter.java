@@ -28,10 +28,8 @@ public class JwtFilter extends AuthenticatingFilter {
         if (!StringUtils.hasText(token)) {
             return true;
         } else {
-            //若校验失败，会抛出JWTVerificationException异常
-            try {
-                JwtUtil.verifyToken(token);
-            } catch (Exception e) {
+            boolean verified = JwtUtil.verifyToken(token);
+            if (!verified) {
                 return true;
             }
         }
