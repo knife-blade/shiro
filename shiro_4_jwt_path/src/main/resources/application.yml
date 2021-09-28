@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shiro?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 222333
+
+# mybatis-plus打印SQL日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+shiro:
+  enabled: true       # 开启 shiro，默认为 true
+  web:
+    enabled: true     # 开启 shiro Web，默认为 true
+#  loginUrl: /login    # 登录地址，默认为"login.jsp"
+#  successUrl: /index  # 登录成功后跳转的地址，默认为"/"
+#  unauthorizedUrl: /unauthorized          # 未获授权默认跳转地址
+#  sessionManager:
+#    sessionIdCookieEnabled: true          # 是否允许通过 Cookie 实现会话跟踪，默认为 true。
+#    sessionIdUrlRewritingEnabled: false   # 是否将JSESSIONID放到url中，默认为 true。
+#  annotations:
+#    enabled: true    # 开启shiro的注解。比如：@RequiresRole。
+# 开启shiro注解一共有三种方式。
+#    1.引入spring aop依赖：org.springframework.boot:spring-boot-starter-aop
+#    2.在application.yml里边设置：shiro.annotations.enabled=true。
+#         对应：ShiroAnnotationProcessorAutoConfiguration.class
+#    3.提供一个AuthorizationAttributeSourceAdvisor这个bean
+#  强烈建议使用第1种，因为shiro自带的aop与spring aop只能用一个，如果用了shiro的aop，那么很多
+#  spring的注解就失效了。比如：@Async，@Cacheable
+
+# 自定义的配置
+custom:
+  jwt:
+    secret: 7h4alejfloriaj5&asf!a4m   # 密钥。随便写
+    expire: 1800    # token有效时间，30分钟。单位：秒
+
