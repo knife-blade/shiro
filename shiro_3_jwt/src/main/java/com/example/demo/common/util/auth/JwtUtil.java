@@ -12,14 +12,14 @@ import com.example.demo.config.properties.JwtProperties;
 import java.util.Date;
 
 public class JwtUtil {
-    private static JwtProperties jwtProperties;
+    private static final JwtProperties jwtProperties;
+
+    static {
+        jwtProperties = ApplicationContextHolder.getContext().getBean(JwtProperties.class);
+    }
 
     // 创建jwt token
     public static String createToken(String userId) {
-        if (jwtProperties == null) {
-            jwtProperties = ApplicationContextHolder.getContext()
-                    .getBean(JwtProperties.class);
-        }
         try {
             Date date = new Date(System.currentTimeMillis() + jwtProperties.getExpire() * 1000);
             Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
@@ -36,10 +36,6 @@ public class JwtUtil {
 
     // 校验token
     public static boolean verifyToken(String token) {
-        if (jwtProperties == null) {
-            jwtProperties = ApplicationContextHolder.getContext()
-                    .getBean(JwtProperties.class);
-        }
         try {
             Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
             JWTVerifier verifier = JWT.require(algorithm)
@@ -61,5 +57,9 @@ public class JwtUtil {
         } catch (JWTDecodeException e) {
             return null;
         }
+    }
+
+    public static boolean isTokenExpired() {
+
     }
 }
