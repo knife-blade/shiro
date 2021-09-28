@@ -34,20 +34,24 @@ public class JwtUtil {
         }
     }
 
-    // 校验token
-    public static boolean verifyToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
-            JWTVerifier verifier = JWT.require(algorithm)
-                    // .withIssuer("auth0")
-                    // .withClaim("username", username)
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
-            return true;
-        } catch (JWTVerificationException exception) {
-            // token错误、token超期等，都会走到这里
-            return false;
-        }
+    /**
+     * 校验token
+     *   若校验失败，会抛出异常：{@link JWTVerificationException}
+     *   失败情况（按先后顺序）：
+     *     算法不匹配：{@link com.auth0.jwt.exceptions.AlgorithmMismatchException}
+     *     签名验证失败：{@link com.auth0.jwt.exceptions.SignatureVerificationException}
+     *     Claim无效：{@link com.auth0.jwt.exceptions.InvalidClaimException}
+     *     token超期：{@link com.auth0.jwt.exceptions.TokenExpiredException}
+     */
+    public static void verifyToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
+        JWTVerifier verifier = JWT.require(algorithm)
+                // .withIssuer("auth0")
+                // .withClaim("username", username)
+                .build();
+
+        //若校验失败，会抛出JWTVerificationException异常
+        DecodedJWT jwt = verifier.verify(token);
     }
 
     public static String getUserIdByToken(String token) {
@@ -60,6 +64,6 @@ public class JwtUtil {
     }
 
     public static boolean isTokenExpired() {
-
+        return true;
     }
 }
