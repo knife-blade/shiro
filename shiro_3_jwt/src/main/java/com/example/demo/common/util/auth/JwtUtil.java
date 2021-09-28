@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
-@Slf4j
 public class JwtUtil {
     private static final JwtProperties jwtProperties;
     private static final JWTVerifier jwtVerifier;
@@ -58,8 +57,7 @@ public class JwtUtil {
 
     public static String getUserIdByToken(String token) {
         try {
-            String userId = JWT.decode(token).getAudience().get(0);
-            return userId;
+            return JWT.decode(token).getAudience().get(0);
         } catch (JWTDecodeException e) {
             return null;
         }
