@@ -1,15 +1,18 @@
 package com.example.demo.config.shiro.filter;
 
+import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class JwtFilter extends AuthenticatingFilter {
     /**
@@ -30,7 +33,9 @@ public class JwtFilter extends AuthenticatingFilter {
         } else {
             boolean verified = JwtUtil.verifyToken(token);
             if (!verified) {
-                return true;
+                HttpServletResponse response = (HttpServletResponse) servletResponse;
+                ResponseUtil.jsonResponse(response, HttpStatus.UNAUTHORIZED.value(), "认证失败");
+                return false;
             }
         }
 

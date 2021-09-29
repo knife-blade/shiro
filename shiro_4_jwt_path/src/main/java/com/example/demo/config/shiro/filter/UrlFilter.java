@@ -2,12 +2,14 @@ package com.example.demo.config.shiro.filter;
 
 import com.example.demo.common.entity.Result;
 import com.example.demo.common.util.ApplicationContextHolder;
+import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.rbac.permission.service.PermissionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.PathMatchingFilter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -42,15 +44,8 @@ public class UrlFilter extends PathMatchingFilter {
 
         // 构造无权限时的response
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        //让浏览器用utf8来解析返回的数据
-        httpResponse.setHeader("Content-type", "application/json;charset=UTF-8");
-        //告诉servlet用UTF-8转码，而不是用默认的ISO8859
-        httpResponse.setCharacterEncoding("UTF-8");
-
-        Result result = new Result().failure().message("用户(" + userId + ")无此url(" + uri + ")权限");
-        String json = new ObjectMapper().writeValueAsString(result);
-        httpResponse.getWriter().print(json);
+        ResponseUtil.jsonResponse(httpResponse, HttpStatus.FORBIDDEN.value(),
+                "用户(" + userId + ")无此url(" + uri + ")权限");
 
         return false;
     }
