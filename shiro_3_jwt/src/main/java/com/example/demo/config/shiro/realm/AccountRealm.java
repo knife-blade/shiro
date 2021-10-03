@@ -38,7 +38,6 @@ public class AccountRealm extends AuthorizingRealm {
     }
 
     // 登录认证
-    // 此处的 SimpleAuthenticationInfo 可返回任意值，密码校验时不会用到它。
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
@@ -59,8 +58,10 @@ public class AccountRealm extends AuthorizingRealm {
         accountProfile.setUserName(user.getUserName());
 
         String salt = user.getSalt();
-        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法，通常返回当前类名 :accountRealm
-        // 盐也放进去，通过ShiroConfig里配置的 HashedCredentialsMatcher 进行自动校验
+
+        // 认证信息里存放账号密码, getName() 是当前Realm的继承方法，通常返回当前类名:accountRealm
+        // 盐：通过ShiroConfig里配置的 HashedCredentialsMatcher 进行自动校验。
+        //     但本处我是直接在登录接口中校验的密码，所以本处盐不提供也可以
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 accountProfile, jwtToken.getCredentials(), ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;

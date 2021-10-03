@@ -3,6 +3,7 @@ package com.example.demo.config.shiro;
 import com.example.demo.common.constant.WhiteList;
 import com.example.demo.config.shiro.filter.JwtFilter;
 import com.example.demo.config.shiro.realm.AccountRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -73,6 +74,23 @@ public class ShiroConfig {
         defaultAdvisorAutoProxyCreator.setUsePrefix(true);
         return defaultAdvisorAutoProxyCreator;
     }
+
+    /**
+     * 凭证匹配器
+     * - 如果密码校验交给Shiro的SimpleAuthenticationInfo进行处理，则需要提供本类，并修改下doGetAuthenticationInfo
+     * - 本处我登录接口的密码校验是自己写的，所以不需要提供本类
+     * @return
+     */
+    /* @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");//散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
+        hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
+
+        return hashedCredentialsMatcher;
+    }*/
 
     /**
      * 开启shiro 注解。比如：@RequiresRole
