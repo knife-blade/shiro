@@ -6,7 +6,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 public class TestEncryption {
 
     public static void main(String[] args) {
-        String password = "123";
+        String password = "222333";
         int times = 2;
         String algorithmName = "md5";
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();

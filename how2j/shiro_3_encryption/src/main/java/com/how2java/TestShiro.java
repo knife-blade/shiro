@@ -66,6 +66,4 @@ public class TestShiro {
 
         return subject.isAuthenticated();
     }
-
-
 }

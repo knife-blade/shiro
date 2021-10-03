@@ -6,7 +6,7 @@
     <groupId>com.how2java</groupId>
     <artifactId>shiro_8_SpringBoot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shiro</name>
+    <name>shiro_8_SpringBoot</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
