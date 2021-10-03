@@ -1,7 +1,7 @@
 package com.how2java;
- 
+
 import java.util.Set;
- 
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -13,43 +13,43 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
- 
+
 public class DatabaseRealm extends AuthorizingRealm {
- 
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-         
-        //ÄÜ½øÈëµ½ÕâÀï£¬±íÊ¾ÕËºÅÒÑ¾­Í¨¹ıÑéÖ¤ÁË
-        String userName =(String) principalCollection.getPrimaryPrincipal();
-        //Í¨¹ıDAO»ñÈ¡½ÇÉ«ºÍÈ¨ÏŞ
+
+        //èƒ½è¿›å…¥åˆ°è¿™é‡Œï¼Œè¡¨ç¤ºè´¦å·å·²ç»é€šè¿‡éªŒè¯äº†
+        String userName = (String) principalCollection.getPrimaryPrincipal();
+        //é€šè¿‡DAOè·å–è§’è‰²å’Œæƒé™
         Set<String> permissions = new DAO().listPermissions(userName);
         Set<String> roles = new DAO().listRoles(userName);
-         
-        //ÊÚÈ¨¶ÔÏó
+
+        //æˆæƒå¯¹è±¡
         SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();
-        //°ÑÍ¨¹ıDAO»ñÈ¡µ½µÄ½ÇÉ«ºÍÈ¨ÏŞ·Å½øÈ¥
+        //æŠŠé€šè¿‡DAOè·å–åˆ°çš„è§’è‰²å’Œæƒé™æ”¾è¿›å»
         s.setStringPermissions(permissions);
         s.setRoles(roles);
         return s;
     }
- 
+
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         System.out.println(this.getCredentialsMatcher());
-        //»ñÈ¡ÕËºÅÃÜÂë
+        //è·å–è´¦å·å¯†ç 
         UsernamePasswordToken t = (UsernamePasswordToken) token;
-        String userName= token.getPrincipal().toString();
+        String userName = token.getPrincipal().toString();
 
-        //»ñÈ¡Êı¾İ¿âÖĞµÄÃÜÂë
+        //è·å–æ•°æ®åº“ä¸­çš„å¯†ç 
         User user = new DAO().getUser(userName);
         String passwordInDB = user.getPassword();
         String salt = user.getSalt();
 
-        //ÈÏÖ¤ĞÅÏ¢Àï´æ·ÅÕËºÅÃÜÂë, getName() ÊÇµ±Ç°RealmµÄ¼Ì³Ğ·½·¨,Í¨³£·µ»Øµ±Ç°ÀàÃû :databaseRealm
-        //ÑÎÒ²·Å½øÈ¥
-        //ÕâÑùÍ¨¹ıshiro.iniÀïÅäÖÃµÄ HashedCredentialsMatcher ½øĞĞ×Ô¶¯Ğ£Ñé
-        SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(userName,passwordInDB,ByteSource.Util.bytes(salt),getName());
+        //è®¤è¯ä¿¡æ¯é‡Œå­˜æ”¾è´¦å·å¯†ç , getName() æ˜¯å½“å‰Realmçš„ç»§æ‰¿æ–¹æ³•,é€šå¸¸è¿”å›å½“å‰ç±»å :databaseRealm
+        //ç›ä¹Ÿæ”¾è¿›å»
+        //è¿™æ ·é€šè¿‡shiro.inié‡Œé…ç½®çš„ HashedCredentialsMatcher è¿›è¡Œè‡ªåŠ¨æ ¡éªŒ
+        SimpleAuthenticationInfo a = new SimpleAuthenticationInfo(userName, passwordInDB, ByteSource.Util.bytes(salt), getName());
         return a;
     }
- 
+
 }
