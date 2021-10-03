@@ -13,7 +13,7 @@ public class TestEncryption {
 
         String encodedPassword = new SimpleHash(algorithmName, password, salt, times).toString();
 
-        System.out.printf("原始密码是 %s , 盐是： %s, 运算次数是： %d, 运算出来的密文是：%s ",
+        System.out.printf("原始密码是：%s , 盐是：%s, 运算次数是：%d, 运算出来的密文是：%s ",
                 password, salt, times, encodedPassword);
     }
 }
