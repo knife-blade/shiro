@@ -44,7 +44,7 @@ public class LoginController {
 
         String token = JwtUtil.createToken(user.getId().toString());
 
-        response.setHeader(HttpHeaders.SET_COOKIE, token);
+        response.setHeader(AuthConstant.AUTHENTICATION_HEADER, token);
         // 自定义Header也可以，但浏览器不会存自定义的Header，需要前端自己去存
         // response.setHeader("Authentication", token);
 
