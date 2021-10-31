@@ -1,16 +1,20 @@
 package com.example.demo.config.shiro.filter;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.demo.common.constant.AuthConstant;
+import com.example.demo.common.util.ResponseUtil;
 import com.example.demo.common.util.auth.JwtUtil;
 import com.example.demo.config.shiro.entity.JwtToken;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class JwtFilter extends AuthenticatingFilter {
     /**
@@ -27,11 +31,20 @@ public class JwtFilter extends AuthenticatingFilter {
         // String token = request.getHeader("Authentication");
 
         if (!StringUtils.hasText(token)) {
-            return true;
+            ResponseUtil.jsonResponse((HttpServletResponse) servletResponse,
+                    HttpStatus.UNAUTHORIZED.value(), "授权信息不能为空");
+            return false;
         } else {
-            boolean verified = JwtUtil.verifyToken(token);
-            if (!verified) {
-                return true;
+            try {
+                JwtUtil.verifyToken(token);
+            } catch (TokenExpiredException e) {
+                ResponseUtil.jsonResponse((HttpServletResponse) servletResponse,
+                        HttpStatus.UNAUTHORIZED.value(), "授权信息已过期，请重新登录");
+                return false;
+            } catch (Exception e) {
+                ResponseUtil.jsonResponse((HttpServletResponse) servletResponse,
+                        HttpStatus.UNAUTHORIZED.value(), "授权信息校验失败");
+                return false;
             }
         }
 

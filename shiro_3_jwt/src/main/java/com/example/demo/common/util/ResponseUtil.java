@@ -2,7 +2,6 @@ package com.example.demo.common.util;
 
 import com.example.demo.common.entity.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
 

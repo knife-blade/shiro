@@ -43,7 +43,7 @@ public class JwtUtil {
      * - Claim无效：{@link com.auth0.jwt.exceptions.InvalidClaimException}
      * - token超期：{@link com.auth0.jwt.exceptions.TokenExpiredException}
      */
-    public static boolean verifyToken(String token) {
+    public static void verifyToken(String token) {
         Algorithm algorithm = Algorithm.HMAC512(jwtProperties.getSecret());
 
         JWTVerifier jwtVerifier = JWT.require(algorithm)
@@ -51,13 +51,7 @@ public class JwtUtil {
                 // .withClaim("userName", userName)
                 .build();
 
-        try {
-            DecodedJWT jwt = jwtVerifier.verify(token);
-        } catch (JWTVerificationException e) {
-            return false;
-        }
-
-        return true;
+        DecodedJWT jwt = jwtVerifier.verify(token);
     }
 
     public static String getUserIdByToken(String token) {
