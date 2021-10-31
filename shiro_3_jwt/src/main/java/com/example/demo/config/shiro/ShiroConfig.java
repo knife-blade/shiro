@@ -17,7 +17,9 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -32,15 +34,31 @@ public class ShiroConfig {
         });
 
         // all other paths require a logged in user
-        chainDefinition.addPathDefinition("/**", "authc");
+        chainDefinition.addPathDefinition("/**", "jwt");
         return chainDefinition;
     }
 
-    // 名字必须是authc，用以替代shiro默认的authc。
-    @Bean("authc")
-    public AuthenticatingFilter authenticatingFilter() {
-        return new JwtFilter();
+    /**
+     * 设置过滤器，将自定义的Filter加入。
+     */
+    @Bean("shiroFilterFactoryBean")
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
+        ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+        factoryBean.setSecurityManager(securityManager);
+        Map<String, Filter> filterMap = factoryBean.getFilters();
+        filterMap.put("jwt", new JwtFilter());
+        factoryBean.setFilters(filterMap);
+        factoryBean.setFilterChainDefinitionMap(shiroFilterChainDefinition().getFilterChainMap());
+
+        return factoryBean;
     }
+
+    // 这样是不行的，会导致标记了anon的路径也会走到JwtFilter。
+    // 也就是说：不能将自定义的filter注册成bean。
+    // @Bean("authc")
+    // public AuthenticatingFilter authenticatingFilter() {
+    //     return new JwtFilter();
+    // }
 
     @Bean
     public DefaultWebSecurityManager securityManager() {
