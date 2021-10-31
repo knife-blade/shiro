@@ -44,6 +44,12 @@ public class ShiroConfig {
     @Bean("shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
+        // 登录的地址
+        factoryBean.setLoginUrl("/login");
+        // 登录成功后要跳转的地址
+        // factoryBean.setSuccessUrl("/index");
+        // 未授权地址
+        // factoryBean.setUnauthorizedUrl("/unauthorized");
         factoryBean.setSecurityManager(securityManager);
         Map<String, Filter> filterMap = factoryBean.getFilters();
         filterMap.put("jwt", new JwtFilter());
