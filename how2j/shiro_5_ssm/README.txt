@@ -1,1 +1,0 @@
-此sql脚本与shiro_2_db.sql和shiro_4_web相同。
